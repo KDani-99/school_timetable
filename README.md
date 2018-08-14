@@ -1,4 +1,4 @@
-# timetable
+# Timetable
 
 Made by: Patrick & Daniel
 
