@@ -1,6 +1,6 @@
 name: Timetable
 description: 'Simple, useful timetable application.'
-repository: ''
+repository: 'https://github.com/KDani-99/timetable'
 category: Education
 license: MIT
 screenshots:
