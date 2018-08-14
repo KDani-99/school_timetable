@@ -23,5 +23,5 @@ You can set the background color for each lesson with HEX/RGB/Basic HTML colors.
 
 There might be bugs,errors, so if you find any, please report it.
 
-## Contanct/Feedback
+## Contact/Feedback
 If you would like to message us, please send an email to : porsekin@gmail.com
