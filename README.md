@@ -12,8 +12,8 @@ We wanted to make a really simple, but useful application to manage your lessons
 
 ## Screenshots
 
-![Screenshot 1](/addUI.png)
 ![Screenshot 2](/ui.png)
+![Screenshot 1](/addUI.png)
 
 ## Planned features
 
