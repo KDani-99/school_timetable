@@ -2,7 +2,7 @@
 
 Made by: Patrick & Daniel
 
-We wanted to make a really simple, but useful application to manage your lessons/activities.
+We wanted to make a really simple, but useful application to manage your lessons/activities, so we made it.
 
 ## Usage
 
