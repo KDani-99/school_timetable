@@ -4,7 +4,7 @@ Made by: Patrick & Daniel
 
 We wanted to make a really simple, but useful application to manage your lessons/activities, so we made it.
 
-## Usage
+## Usage/Current features
 
 - You can add/edit/delete lessons/activities.
 - You can even add multiple weeks, so you can change the week that you want to see!
