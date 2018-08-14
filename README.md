@@ -18,6 +18,8 @@ You can set the background color for each lesson with HEX/RGB/Basic HTML colors.
 ## Planned features
 
 - Responsivity
+- Notifications
+- And other simple features
 
 ## Bugs/Errors
 
