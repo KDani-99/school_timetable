@@ -6,9 +6,9 @@ We wanted to make a really simple, but useful application to manage your lessons
 
 ## Usage
 
-You can add/edit/delete lessons,activities.
-You can even add multiple weeks, so you can change the week that you want to see!
-You can set the background color for each lesson with HEX/RGB/Basic HTML colors.
+- You can add/edit/delete lessons,activities.
+- You can even add multiple weeks, so you can change the week that you want to see!
+- You can set the background color for each lesson with HEX/RGB/Basic HTML colors.
 
 ## Screenshots
 
