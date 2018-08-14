@@ -12,7 +12,7 @@ We wanted to make a really simple, but useful application to manage your lessons
 
 ## Screenshots
 
-![Screenshot 1](https://imgur.com/a/6peasHa)
+![Screenshot 1](/addUI.png)
 ![Screenshot 2](https://imgur.com/a/p7ILdTH)
 
 ## Planned features
