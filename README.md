@@ -9,6 +9,7 @@ We wanted to make a really simple, but useful application to manage your lessons
 - You can add/edit/delete lessons/activities.
 - You can even add multiple weeks, so you can change the week that you want to see!
 - You can set the background color for each lesson with HEX/RGB/Basic HTML colors.
+- Lessons/activites are saved in a JSON file
 
 ## Screenshots
 
