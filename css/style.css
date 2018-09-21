@@ -309,152 +309,7 @@ body {
   width: 100vw;
   height: 30px;
   background: #23232E; }
-  .menubar .deleteBTN {
-    position: absolute;
-    top: 0;
-    left: 600px;
-    width: 150px;
-    height: 30px;
-    text-align: center;
-    cursor: pointer; }
-    .menubar .deleteBTN:hover i {
-      color: #09BC8A; }
-    .menubar .deleteBTN i {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #8B8DA1; }
-    .menubar .deleteBTN p {
-      cursor: pointer;
-      font-family: Raleway;
-      font-weight: 700;
-      font-size: 14px;
-      color: #8B8DA1;
-      position: absolute;
-      top: 50%;
-      left: 40px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%); }
-  .menubar .addBTN {
-    position: absolute;
-    top: 0;
-    left: 300px;
-    width: 150px;
-    height: 30px;
-    cursor: pointer; }
-    .menubar .addBTN:hover i {
-      color: #09BC8A; }
-    .menubar .addBTN i {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #8B8DA1; }
-    .menubar .addBTN p {
-      cursor: pointer;
-      font-family: Raleway;
-      font-weight: 700;
-      font-size: 14px;
-      color: #8B8DA1;
-      position: absolute;
-      top: 50%;
-      left: 40px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%); }
-  .menubar .editBTN {
-    position: absolute;
-    top: 0;
-    left: 450px;
-    width: 150px;
-    height: 30px;
-    text-align: center;
-    cursor: pointer; }
-    .menubar .editBTN:hover i {
-      color: #09BC8A; }
-    .menubar .editBTN i {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #8B8DA1; }
-    .menubar .editBTN p {
-      cursor: pointer;
-      font-family: Raleway;
-      font-weight: 700;
-      font-size: 14px;
-      color: #8B8DA1;
-      position: absolute;
-      top: 50%;
-      left: 40px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%); }
-  .menubar .changeWeekBTN {
-    position: absolute;
-    top: 0;
-    left: 150px;
-    width: 150px;
-    height: 30px;
-    text-align: center;
-    cursor: pointer; }
-    .menubar .changeWeekBTN:hover i {
-      color: #09BC8A; }
-    .menubar .changeWeekBTN i {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #8B8DA1; }
-    .menubar .changeWeekBTN p {
-      cursor: pointer;
-      font-family: Raleway;
-      font-weight: 700;
-      font-size: 14px;
-      color: #8B8DA1;
-      position: absolute;
-      top: 50%;
-      left: 40px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%); }
-  .menubar .selectedWeek {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 150px;
-    height: 30px;
-    text-align: center; }
-    .menubar .selectedWeek p {
-      font-family: Raleway;
-      font-weight: 700;
-      font-size: 16px;
-      color: #09BC8A;
-      position: absolute;
-      top: 50%;
-      left: 40px;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%); }
-  .menubar #weeks {
+  /*.menubar #weeks {
     position: absolute;
     top: 30px;
     left: 150px;
@@ -471,7 +326,7 @@ body {
     height: 30px;
     background: #23232E;
     z-index: 90;
-    display: none; }
+    display: none; }*/
     .menubar #weeks:hover {
       background: #2B2C38; }
     .menubar #weeks li {
@@ -524,7 +379,9 @@ body {
       color: #8B8DA1; }
 
 .container {
-  position: absolute;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
   top: 80px;
   left: 0;
   width: 100vw;
@@ -534,7 +391,7 @@ body {
   padding-right: 30px;
   overflow: hidden; }
   .container .innerContainer {
-    background: #f2f2f2;
+    background: none;
     position: absolute;
     top: 0;
     left: 0;

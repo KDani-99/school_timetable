@@ -6,6 +6,7 @@ const fs = require('fs')
 let canDelete = false // -> Toggle Delete Button
 let canEdit = false // -> Toggle Edit Button
 let hideWeeks = false // -> Toggle Enable/Disable changeweek panel
+let hideBackground = false
 
 let data2 = {Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []} // -> Set default days and write them to a json file
 let readDays = {} // -> We will read the values here from the json file, but we will delete the start_time values
@@ -16,9 +17,78 @@ let weeks = []
 let currentWeekIndex // -> We need to save the selected week's id, because if we delete,edit or add something the default week would be loaded in the table over and over again
 let clickedId // -> Get the clicked element's id
 
+let bgInterval
+let bgData = {changeTime:'',background:''}
+
+// Only Number Imput Check
+
+let timer
+$('#bgSec').keyup(()=>{
+  if (isNaN($('#bgSec').val()) || $('#bgSec').val().includes('.')) {
+    $('#bgSec').val('')
+    return
+  }
+  clearTimeout(timer)
+  timer = setTimeout(function() {
+    if ($('#bgSec').val() > 10000 || ($('#bgSec').val() < 5 && $('#bgSec').val() != 0)) {
+      $('#bgSec').val('')
+      $('.error').html('Minimum change time is 5 seconds or 0 seconds')
+      $('.error').animate({'opacity':'1'},400)
+      return
+    }
+  }, 500)
+})
 /// /////////////////////////////////////////////////////////////////////////////
 /// //////////////////////        CLICK EVENTS         //////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////
+
+$(document).ready(()=>{
+  for (let i=1;i<=24;i++) {
+    $('.addLessonOverlay #start_time_h').append('<option value='+i+'>'+i+'</option>')
+  }
+  for(let i=0;i<60;i++) {
+    if (i<10) {
+      $('.addLessonOverlay #start_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
+    }
+    if (i>10) {
+      $('.addLessonOverlay #start_time_mm').append('<option value='+i+'>'+i+'</option>')
+    }
+  }
+  for (let i=1;i<=24;i++) {
+    $('.addLessonOverlay #finish_time_h').append('<option value='+i+'>'+i+'</option>')
+  }
+  for (let i=0;i<60;i++) {
+    if (i<10) {
+      $('.addLessonOverlay #finish_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
+    }
+    if (i>10) {
+      $('.addLessonOverlay #finish_time_mm').append('<option value='+i+'>'+i+'</option>')
+    }
+  }
+  // EditLesson Part
+  for (let i=1;i<=24;i++) {
+    $('.editLessonOverlay #start_time_h').append('<option value='+i+'>'+i+'</option>')
+  }
+  for(let i=0;i<60;i++) {
+    if (i<10) {
+      $('.editLessonOverlay #start_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
+    }
+    if (i>10) {
+      $('.editLessonOverlay #start_time_mm').append('<option value='+i+'>'+i+'</option>')
+    }
+  }
+  for (let i=1;i<=24;i++) {
+    $('.editLessonOverlay #finish_time_h').append('<option value='+i+'>'+i+'</option>')
+  }
+  for (let i=0;i<60;i++) {
+    if (i<10) {
+      $('.editLessonOverlay #finish_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
+    }
+    if (i>10) {
+      $('.editLessonOverlay #finish_time_mm').append('<option value='+i+'>'+i+'</option>')
+    }
+  }
+});
 
 $('.exitBTN').on('click', () => { // -> Simple app exit
   app.quit()
@@ -35,7 +105,6 @@ $('.deleteBTN').on('click', function () { // -> This is the function that we cal
     $('.lesson .deleteItem').css('display', 'none')
   }
 })
-
 $('.editBTN').on('click', function () { // -> This is the function that we call if we want to toggle the edit function !NOTE: We also disable the delete function once we call this
   canEdit = !canEdit
   if (canEdit) {
@@ -66,26 +135,132 @@ $('#exitOverlay').on('click', function () {
   $('.addLessonOverlay').animate({
     'opacity': '0'
   }, 400)
-
+  $('.bg').css('filter','none')
   setTimeout(function () {
     $('.addLessonOverlay').css('display', 'none')
   }, 400)
 })
 
 $('.editLessonOverlay .innerBox #exitOverlay').on('click', function () {
+  $('.bg').css('filter','none')
   $('.editLessonOverlay').animate({
     'opacity': '0'
   }, 400)
-
   setTimeout(function () {
     $('.editLessonOverlay').css('display', 'none')
   }, 400)
 })
 
+$('.bgBTN').on('click', ()=>{
+  hideBackground = !hideBackground
+  if (hideBackground) {
+    $('.setBGOverlay').css('display','block')
+    $('.bg').css('filter','blur(5px)')
+    $('.setBGOverlay').animate({
+      'opacity': '1'
+    }, 400)
+  } else {
+    $('.setBGOverlay').animate({
+      'opacity': '0'
+    }, 400)
+
+    setTimeout(function () {
+      $('.setBGOverlay').css('display', 'none')
+    }, 400)
+  }
+})
+
+$('#exitOverlay3').on('click',function () {
+
+  $('.setBGOverlay').animate({
+    'opacity': '0'
+  }, 400)
+  $('.bg').css('filter','none')
+  setTimeout(function () {
+    $('.setBGOverlay').css('display', 'none')
+  }, 400)
+
+  hideBackground = false
+})
+
+$('.addBG').on('click',function() {
+  $('#bgSec').css('border','1px solid white')
+  $('.error').css('opacity','0')
+  if ($('#bgSec').val().includes('.') || isNaN($('#bgSec').val()) || (parseInt($('#bgSec').val()) < 5 && parseInt($('#bgSec').val()) !== 0)) {
+    $('#bgSec').css('border','1px solid #DB2B39');
+    return
+  }
+  if($('.staticColor').val().length === 0) {
+    let newContent = {changeTime:$('#bgSec').val(),background:''}
+    fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(newContent),(e)=>{
+    })
+  }
+  if(parseInt($('#bgSec').val()) < 5 && parseInt($('#bgSec').val()) != 0 || parseInt($('#bgSec').val()) > 10000) return
+  if ($('#bgFile').val().length > 0) {
+
+    let fileName = document.getElementsByTagName('input')[0].files[0].path
+    let length = fileName.length-1
+    let extension = ''
+    for (let i=0;i<fileName.length;i++) {
+      if (fileName[length] === '.') break
+      extension += fileName[length]
+      length -= 1
+    }
+    let extLength = extension.length-1
+    let reversedExtension = ''
+    for (let i=0;i<extension.length;i++) {
+      reversedExtension += extension[extLength]
+      extLength-=1
+    }
+
+    if (reversedExtension === 'png' ||  reversedExtension === 'PNG' || reversedExtension === 'svg' || reversedExtension === 'SVG' || reversedExtension === 'jpg' || reversedExtension === 'JPG' || reversedExtension === 'gif' || reversedExtension === 'GIF' || reversedExtension === 'jpeg' || reversedExtension === 'JPEG' || reversedExtension === 'JFIF' || reversedExtension === 'jfif') {
+
+      let splittedFileName = fileName.split('\\')
+      let getName = splittedFileName[splittedFileName.length-1].split('.')
+
+      fs.createReadStream(fileName).pipe(fs.createWriteStream(app.getPath('userData')+'/images/'+getName[0]+'.'+getName[1]))
+
+        let cfileName = getName[0]+'.'+getName[1]
+
+        let newData = {changeTime:$('#bgSec').val(),background:cfileName}
+
+        fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(newData),(e)=>{
+        })
+        clearInterval(bgInterval)
+        $('.staticColor').val(cfileName)
+
+
+    } else {
+      $('.error').animate({'opacity':'1'},400)
+      $('.error').html('Invalid File Format<br>(Supported: PNG,SVG,JPG,GIF,JPEG,JFIF)')
+      return
+    }
+
+  }
+  else {
+    let newContent2 = {changeTime:$('#bgSec').val(),background:$('.staticColor').val()}
+    fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(newContent2),(e)=>{
+    })
+  }
+
+  $('.setBGOverlay').animate({
+    'opacity': '0'
+  }, 400)
+  $('.bg').css('filter','none')
+  setTimeout(function () {
+    $('.setBGOverlay').css('display', 'none')
+  }, 400)
+
+  hideBackground = false
+
+  $('#bgFile').val('')
+
+  readData()
+})
 /// /////////////////////////////////////////////////////////////////////////////
 /// //////////////////////     ADD ELEMENTS TO ARRAY   //////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////
-/* This function was taken from StackOverflow */
+
 
 function add3 (key, value) {
   if (!Array.isArray(readDaysWrite[key])) {
@@ -99,7 +274,137 @@ function add3 (key, value) {
 /// /////////////////////////////////////////////////////////////////////////////
 
 function readData () {
-  /* We need to reset everything */
+
+  let fileNames = []
+  let fileIndex = 0
+  let readBGSettings = {}
+  let location = app.getPath('userData')
+  let newloc = ""
+  for (let i=0;i<location.length;i++) {
+    if (location[i] == '\\') {
+      newloc += '/'
+    } else {
+      newloc += location[i]
+    }
+  }
+
+  if(!fs.existsSync(app.getPath('userData')+'/images')){
+    fs.mkdirSync(app.getPath('userData')+'/images')
+  }
+
+  if(!fs.existsSync(app.getPath('userData')+'/background_settings.json'))
+    fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(bgData),(e)=>{
+  })
+
+  clearInterval(bgInterval)
+
+  fs.readFile(app.getPath('userData')+'/background_settings.json','utf-8',(err,data)=>{
+    if (err) throw new Error('error')
+    try{
+      readBGSettings = JSON.parse(data)
+
+    if(readBGSettings.changeTime === ''){
+      $('.container .bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
+      $('.container .bg').css('background-size','cover')
+      $('.container .bg').css('background-repeat','no-repeat')
+    }
+    if(readBGSettings.changeTime < 5 && readBGSettings.changeTime != 0)
+      readBGSettings.changeTime = 0
+
+
+    $('.staticColor').val(readBGSettings.background)
+    $('#bgSec').val(readBGSettings.changeTime)
+
+    if (readBGSettings.changeTime !== '' && parseInt(readBGSettings.changeTime) === 0 && (readBGSettings.background.includes('.png') || readBGSettings.background.includes('.gif') || readBGSettings.background.includes('.svg') || readBGSettings.background.includes('.jpg') || readBGSettings.background.includes('.jpeg') || readBGSettings.background.includes('.jfif'))) {
+      $('.container .bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
+
+      $('.container .bg').css('background-size','cover')
+      $('.container .bg').css('background-repeat','no-repeat')
+    }
+
+    if (readBGSettings.changeTime !== '' && parseInt(readBGSettings.changeTime) > 0 && (readBGSettings.background.length === 0 || readBGSettings.background.includes('.png') || readBGSettings.background.includes('.gif') || readBGSettings.background.includes('.svg') || readBGSettings.background.includes('.jpg') || readBGSettings.background.includes('.jpeg') || readBGSettings.background.includes('.jfif'))) {
+      fs.readdir(newloc+'/images/',(err,files)=>{
+        if (err) throw new Error('error')
+
+        if(files.length > 1) {
+          for (let i=0;i<files.length;i++) {
+            let length = files[i].length-1
+            let reversedExtension = ''
+            for (let j=0;j<files[i].length;j++) {
+              if(files[i][length] === '.') break
+              reversedExtension += files[i][length]
+              length -= 1
+            }
+            let extLength = reversedExtension.length-1
+            let finalExtension = ''
+            for (let j=0;j<reversedExtension.length;j++) {
+              finalExtension += reversedExtension[extLength]
+              extLength -= 1
+            }
+            if (finalExtension === 'png' || finalExtension === 'PNG' || finalExtension === 'svg' || finalExtension === 'SVG' || finalExtension === 'jpg' || finalExtension === 'JPG' || finalExtension === 'gif' || finalExtension === 'GIF' || finalExtension === 'jpeg' || finalExtension === 'JPEG' || finalExtension === 'JFIF' || finalExtension === 'jfif' ) {
+              fileNames.push(files[i])
+            }
+          }
+
+          fs.readFile(app.getPath('userData')+'/background_settings.json','utf-8',(err,data)=>{
+              if(err) throw new Error('error')
+
+              try{
+                let parsedData = JSON.parse(data)
+
+                if (parsedData.changeTime !== null) {
+
+                  let changeTime = parseInt(parsedData.changeTime)*1000
+
+                    bgInterval = setInterval(()=>{
+                      $('.container .bg').animate({'opacity':'0'},1000)
+                      setTimeout(()=>{
+                        $('.container .bg').css('background','url("'+newloc+'/images/'+fileNames[fileIndex]+'")')
+                        $('.container .bg').css('background-size','cover')
+                        $('.container .bg').css('background-repeat','no-repeat')
+                        $('.container .bg').animate({'opacity':'1'},1000)
+                      },1000)
+                      if(fileNames.length > fileIndex+1) {
+                        fileIndex += 1
+                      }
+                      else {
+                        fileIndex = 0
+                      }
+                    },changeTime)
+                }
+
+              }catch(e){
+                fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(bgData),(e)=>{
+                })
+              }
+
+              })
+
+        }
+
+        if (fileNames.length > 0) {
+          $('.container .bg').css('background','url("'+newloc+'/images/'+fileNames[0]+'")')
+          $('.container .bg').css('background-size','cover')
+          $('.container .bg').css('background-repeat','no-repeat')
+          fileIndex += 0;
+        }
+      })
+    }
+    else {
+      $('.container .bg').css('background',readBGSettings.background)
+      $('.container .bg').css('background-size','cover')
+      $('.container .bg').css('background-repeat','no-repeat')
+    }
+  } catch(e) {
+
+      fs.writeFile(app.getPath('userData')+'/background_settings.json',JSON.stringify(bgData),(e)=>{
+      })
+    }
+    })
+
+  //////////////////////////////////////////////////////////////////////////////
+  /////////////////////           LOAD LESSONS        //////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   readDays = {}
   readDaysWrite = {}
   weeks = []
@@ -322,6 +627,7 @@ $(document).ready(function () {
 /// /////////////////////////////////////////////////////////////////////////////
 
 $('.addBTN').on('click', () => {
+  $('.bg').css('filter','blur(5px)')
   $('.addLessonOverlay').css('display', 'block')
   $('.addLessonOverlay').animate({
     'opacity': '1'
@@ -329,6 +635,7 @@ $('.addBTN').on('click', () => {
 })
 
 $('.addNewLesson').on('click', () => {
+
   let startTimeH
   let startTimeMM
   let finishTimeH
@@ -415,6 +722,8 @@ $('.addNewLesson').on('click', () => {
   }
   if ($('#bgColor').val() === '') {
     bgColor = '#09BC8A'
+  } else {
+    bgColor = $('#bgColor').val()
   }
 
   $('#start_time_h').focus(function () {
@@ -480,6 +789,8 @@ $('.addNewLesson').on('click', () => {
     $('.addLessonOverlay').css('display', 'none')
   }, 400)
 
+  $('.bg').css('filter','none')
+
   readData() // -> Refresh table
 })
 
@@ -504,6 +815,7 @@ $('body').on('click', '#weeks li', (event) => {
 /// /////////////////////////////////////////////////////////////////////////////
 
 $('body').on('click', '.editItem', (event) => {
+  $('.bg').css('filter','blur(5px)')
   $('.editLessonOverlay').css('display', 'block')
   $('.editLessonOverlay').animate({
     'opacity': '1'
@@ -534,6 +846,7 @@ $('body').on('click', '.editItem', (event) => {
 })
 
 $('.editLesson').on('click', '', function (event) {
+  $('.bg').css('filter','none')
   let startTimeH = $('.editLessonOverlay .innerBox #start_time_h').val()
   let startTimeMM = $('.editLessonOverlay .innerBox #start_time_mm').val()
   let finishTimeH = $('.editLessonOverlay .innerBox #finish_time_h').val()
@@ -566,6 +879,8 @@ $('.editLesson').on('click', '', function (event) {
     $('.editLessonOverlay').css('display', 'none')
   }, 400)
 
+  canEdit = false
+
   readData()
 })
 
@@ -581,8 +896,6 @@ $('body').on('click', '.deleteItem', (event) => {
 
   fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(readDaysWrite), () => {
   })
-  fs.readFile(app.getPath('userData') + '/settings.json', 'utf-8', (data) => {
-  })
-
+  canDelete = false
   readData()
 })
