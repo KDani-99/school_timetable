@@ -2,25 +2,26 @@ const {remote} = require('electron')
 const app = remote.app
 const $ = require('jquery')
 const fs = require('fs')
+const dialog = remote.dialog
 
-let canDelete = false // -> Toggle Delete Button
-let canEdit = false // -> Toggle Edit Button
-let hideWeeks = false // -> Toggle Enable/Disable changeweek panel
+const win = remote.getCurrentWindow()
+
+let canDelete = false
+let canEdit = false
+let hideWeeks = false
 let hideBackground = false
 
-let data2 = {Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []} // -> Set default days and write them to a json file
-let readDays = {} // -> We will read the values here from the json file, but we will delete the start_time values
-let readDaysWrite = {} // -> We will read the values here from the json file, but we won't delete the start_time - This object is used to display the values
+let data2 = {Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [], Sunday: []}
+let readDays = {}
+let readDaysWrite = {}
 
 let weeks = []
 
-let currentWeekIndex // -> We need to save the selected week's id, because if we delete,edit or add something the default week would be loaded in the table over and over again
-let clickedId // -> Get the clicked element's id
+let currentWeekIndex
+let clickedId
 
 let bgInterval
 let bgData = {changeTime:'',background:''}
-
-// Only Number Imput Check
 
 let timer
 $('#bgSec').keyup(()=>{
@@ -38,9 +39,6 @@ $('#bgSec').keyup(()=>{
     }
   }, 500)
 })
-/// /////////////////////////////////////////////////////////////////////////////
-/// //////////////////////        CLICK EVENTS         //////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(()=>{
   for (let i=1;i<=24;i++) {
@@ -50,7 +48,7 @@ $(document).ready(()=>{
     if (i<10) {
       $('.addLessonOverlay #start_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
     }
-    if (i>10) {
+    if (i>=10) {
       $('.addLessonOverlay #start_time_mm').append('<option value='+i+'>'+i+'</option>')
     }
   }
@@ -61,11 +59,10 @@ $(document).ready(()=>{
     if (i<10) {
       $('.addLessonOverlay #finish_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
     }
-    if (i>10) {
+    if (i>=10) {
       $('.addLessonOverlay #finish_time_mm').append('<option value='+i+'>'+i+'</option>')
     }
   }
-  // EditLesson Part
   for (let i=1;i<=24;i++) {
     $('.editLessonOverlay #start_time_h').append('<option value='+i+'>'+i+'</option>')
   }
@@ -73,7 +70,7 @@ $(document).ready(()=>{
     if (i<10) {
       $('.editLessonOverlay #start_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
     }
-    if (i>10) {
+    if (i>=10) {
       $('.editLessonOverlay #start_time_mm').append('<option value='+i+'>'+i+'</option>')
     }
   }
@@ -84,40 +81,58 @@ $(document).ready(()=>{
     if (i<10) {
       $('.editLessonOverlay #finish_time_mm').append('<option value=0'+i+'>0'+i+'</option>')
     }
-    if (i>10) {
+    if (i>=10) {
       $('.editLessonOverlay #finish_time_mm').append('<option value='+i+'>'+i+'</option>')
     }
   }
 });
 
-$('.exitBTN').on('click', () => { // -> Simple app exit
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////        CLICK EVENTS         //////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+$('.exitBTN').on('click', () => {
   app.quit()
 })
 
-$('.deleteBTN').on('click', function () { // -> This is the function that we call if we want to toggle the delete function !NOTE: We also disable the edit function once we call this
+$('.minimizeBTN').on('click', () => {
+  win.minimize()
+})
+
+$('.deleteBTN').on('click', function () {
   canDelete = !canDelete
   if (canDelete) {
     $('.lesson .deleteItem').css('display', 'block')
     $('.lesson .editItem').css('display', 'none')
     canEdit = false
+
+    $('i', this).css('color', '#00FF88')
+    $('.editBTN i').css('color', 'white')
   }
   if (!canDelete) {
     $('.lesson .deleteItem').css('display', 'none')
+
+    $('i', this).css('color', 'white')
   }
 })
-$('.editBTN').on('click', function () { // -> This is the function that we call if we want to toggle the edit function !NOTE: We also disable the delete function once we call this
+$('.editBTN').on('click', function () {
   canEdit = !canEdit
   if (canEdit) {
     $('.lesson .deleteItem').css('display', 'none')
     $('.lesson .editItem').css('display', 'block')
     canDelete = false
+
+    $('i', this).css('color', '#00FF88')
+    $('.deleteBTN i').css('color', 'white')
   }
   if (!canEdit) {
     $('.lesson .editItem').css('display', 'none')
+
+    $('i',this).css('color', 'white')
   }
 })
 
-$('.changeWeekBTN').on('click', () => { // -> Enable/Disable week panel
+$('.changeWeekBTN').on('click', () => {
   hideWeeks = !hideWeeks
   if (hideWeeks) {
     $('#weeks').css('display', 'block')
@@ -126,23 +141,31 @@ $('.changeWeekBTN').on('click', () => { // -> Enable/Disable week panel
   }
 })
 
-$('body').on('click', '#weeks li', () => { // -> Disable week panel
+$('body').on('click', '#weeks li', () => {
   hideWeeks = !hideWeeks
   $('#weeks').css('display', 'none')
 })
 
-$('#exitOverlay').on('click', function () {
+$(document).on('keyup',function(evt) {
+  if (evt.keyCode == 27) {
+    $('.addLessonOverlay .innerBox #exitOverlay').click()
+    $('.editLessonOverlay .innerBox #exitOverlay').click()
+    $('.setBGOverlay .innerBox #exitOverlay').click()
+    $('.importexportOverlay .innerBox #exitOverlay').click()
+  }
+})
+
+$('.addLessonOverlay .innerBox #exitOverlay').on('click', function () {
   $('.addLessonOverlay').animate({
     'opacity': '0'
   }, 400)
-  $('.bg').css('filter','none')
   setTimeout(function () {
     $('.addLessonOverlay').css('display', 'none')
   }, 400)
 })
 
+
 $('.editLessonOverlay .innerBox #exitOverlay').on('click', function () {
-  $('.bg').css('filter','none')
   $('.editLessonOverlay').animate({
     'opacity': '0'
   }, 400)
@@ -151,11 +174,19 @@ $('.editLessonOverlay .innerBox #exitOverlay').on('click', function () {
   }, 400)
 })
 
+$('.importexportOverlay .innerBox #exitOverlay').on('click', function () {
+  $('.importexportOverlay').animate({
+    'opacity': '0'
+  }, 400)
+  setTimeout(function () {
+    $('.importexportOverlay').css('display', 'none')
+  }, 400)
+})
+
 $('.bgBTN').on('click', ()=>{
   hideBackground = !hideBackground
   if (hideBackground) {
     $('.setBGOverlay').css('display','block')
-    $('.bg').css('filter','blur(5px)')
     $('.setBGOverlay').animate({
       'opacity': '1'
     }, 400)
@@ -170,12 +201,11 @@ $('.bgBTN').on('click', ()=>{
   }
 })
 
-$('#exitOverlay3').on('click',function () {
+$('.setBGOverlay .innerBox #exitOverlay').on('click',function () {
 
   $('.setBGOverlay').animate({
     'opacity': '0'
   }, 400)
-  $('.bg').css('filter','none')
   setTimeout(function () {
     $('.setBGOverlay').css('display', 'none')
   }, 400)
@@ -231,8 +261,8 @@ $('.addBG').on('click',function() {
 
 
     } else {
-      $('.error').animate({'opacity':'1'},400)
-      $('.error').html('Invalid File Format<br>(Supported: PNG,SVG,JPG,GIF,JPEG,JFIF)')
+      $('.setBGOverlay .error').animate({'opacity':'1'},400)
+      $('.setBGOverlay .error').html('Invalid File Format<br>(Supported: PNG,SVG,JPG,GIF,JPEG,JFIF)')
       return
     }
 
@@ -246,7 +276,6 @@ $('.addBG').on('click',function() {
   $('.setBGOverlay').animate({
     'opacity': '0'
   }, 400)
-  $('.bg').css('filter','none')
   setTimeout(function () {
     $('.setBGOverlay').css('display', 'none')
   }, 400)
@@ -257,9 +286,9 @@ $('.addBG').on('click',function() {
 
   readData()
 })
-/// /////////////////////////////////////////////////////////////////////////////
-/// //////////////////////     ADD ELEMENTS TO ARRAY   //////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////     ADD ELEMENTS TO ARRAY   //////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 
 function add3 (key, value) {
@@ -269,9 +298,9 @@ function add3 (key, value) {
   readDaysWrite[key].push(value)
 }
 
-/// /////////////////////////////////////////////////////////////////////////////
-/// ////////////////////       READ DATA FUNCTION        ////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////       READ DATA FUNCTION        ////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 function readData () {
 
@@ -304,9 +333,9 @@ function readData () {
       readBGSettings = JSON.parse(data)
 
     if(readBGSettings.changeTime === ''){
-      $('.container .bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
-      $('.container .bg').css('background-size','cover')
-      $('.container .bg').css('background-repeat','no-repeat')
+      $('.bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
+      $('.bg').css('background-size','cover')
+      $('.bg').css('background-repeat','no-repeat')
     }
     if(readBGSettings.changeTime < 5 && readBGSettings.changeTime != 0)
       readBGSettings.changeTime = 0
@@ -316,10 +345,10 @@ function readData () {
     $('#bgSec').val(readBGSettings.changeTime)
 
     if (readBGSettings.changeTime !== '' && parseInt(readBGSettings.changeTime) === 0 && (readBGSettings.background.includes('.png') || readBGSettings.background.includes('.gif') || readBGSettings.background.includes('.svg') || readBGSettings.background.includes('.jpg') || readBGSettings.background.includes('.jpeg') || readBGSettings.background.includes('.jfif'))) {
-      $('.container .bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
+      $('.bg').css('background','url("'+newloc+'/images/'+readBGSettings.background+'")')
 
-      $('.container .bg').css('background-size','cover')
-      $('.container .bg').css('background-repeat','no-repeat')
+      $('.bg').css('background-size','cover')
+      $('.bg').css('background-repeat','no-repeat')
     }
 
     if (readBGSettings.changeTime !== '' && parseInt(readBGSettings.changeTime) > 0 && (readBGSettings.background.length === 0 || readBGSettings.background.includes('.png') || readBGSettings.background.includes('.gif') || readBGSettings.background.includes('.svg') || readBGSettings.background.includes('.jpg') || readBGSettings.background.includes('.jpeg') || readBGSettings.background.includes('.jfif'))) {
@@ -357,12 +386,12 @@ function readData () {
                   let changeTime = parseInt(parsedData.changeTime)*1000
 
                     bgInterval = setInterval(()=>{
-                      $('.container .bg').animate({'opacity':'0'},1000)
+                      $('.bg').animate({'opacity':'0'},1000)
                       setTimeout(()=>{
-                        $('.container .bg').css('background','url("'+newloc+'/images/'+fileNames[fileIndex]+'")')
-                        $('.container .bg').css('background-size','cover')
-                        $('.container .bg').css('background-repeat','no-repeat')
-                        $('.container .bg').animate({'opacity':'1'},1000)
+                        $('.bg').css('background','url("'+newloc+'/images/'+fileNames[fileIndex]+'")')
+                        $('.bg').css('background-size','cover')
+                        $('.bg').css('background-repeat','no-repeat')
+                        $('.bg').animate({'opacity':'1'},1000)
                       },1000)
                       if(fileNames.length > fileIndex+1) {
                         fileIndex += 1
@@ -383,17 +412,17 @@ function readData () {
         }
 
         if (fileNames.length > 0) {
-          $('.container .bg').css('background','url("'+newloc+'/images/'+fileNames[0]+'")')
-          $('.container .bg').css('background-size','cover')
-          $('.container .bg').css('background-repeat','no-repeat')
+          $('.bg').css('background','url("'+newloc+'/images/'+fileNames[0]+'")')
+          $('.bg').css('background-size','cover')
+          $('.bg').css('background-repeat','no-repeat')
           fileIndex += 0;
         }
       })
     }
     else {
-      $('.container .bg').css('background',readBGSettings.background)
-      $('.container .bg').css('background-size','cover')
-      $('.container .bg').css('background-repeat','no-repeat')
+      $('.bg').css('background',readBGSettings.background)
+      $('.bg').css('background-size','cover')
+      $('.bg').css('background-repeat','no-repeat')
     }
   } catch(e) {
 
@@ -419,75 +448,87 @@ function readData () {
   fs.readFile(app.getPath('userData') + '/settings.json', 'utf-8', (err, data) => {
     if (err) throw new Error('error')
 
+    if (data.length === 0) {
+      fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(data2), (e) => {
+      })
+      return;
+    }
+
     let sortTimesMonday = []
     let sortTimesTuesday = []
     let sortTimesWednesday = []
-    let sortTimesThursday = [] // -> Save every start_time
+    let sortTimesThursday = []
     let sortTimesFriday = []
     let sortTimesSaturday = []
     let sortTimesSunday = []
 
-    readDays = JSON.parse(data) // -> Parse json string !NOTE: We'll delete the start_time values from this array
-    readDaysWrite = JSON.parse(data) // -> Parse json string !NOTE: We won't delete the start_time values from this array
+    try{
+      readDays = JSON.parse(data)
+      readDaysWrite = JSON.parse(data)
+    } catch (e) {
+      fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(data2), (e) => {
+      })
+      return;
+    }
 
-    /* Read every week from the file and save it to an array */
-    for (let i = 0; i < Object.keys(readDaysWrite).length; i++) { // -> Loop through every day
-      for (let j = 0; j < readDaysWrite[Object.keys(readDaysWrite)[i]].length; j++) { // -> Loop through every lesson
-        if ($.inArray(readDaysWrite[Object.keys(readDaysWrite)[i]][j].week, weeks) === -1) { // -> If the array does not contain the week yet, we'll add it
-          weeks.push(readDaysWrite[Object.keys(readDaysWrite)[i]][j].week) // -> Add the week to the array
+
+    for (let i = 0; i < Object.keys(readDaysWrite).length; i++) {
+      for (let j = 0; j < readDaysWrite[Object.keys(readDaysWrite)[i]].length; j++) {
+        if ($.inArray(readDaysWrite[Object.keys(readDaysWrite)[i]][j].week, weeks) === -1) {
+          weeks.push(readDaysWrite[Object.keys(readDaysWrite)[i]][j].week)
         }
       }
     }
-    /* Append every type of week to the weeks panel */
+
     for (let i = 0; i < weeks.length; i++) {
-      $('#weeks').append('<li id="' + weeks[i] + '">' + weeks[i] + '</li>')
+      $('#weeks').append('<li id="' + weeks[i] + '">Week ' + weeks[i] + '</li>')
       $('.innerContainer').append('<div class="week" id=week' + weeks[i] + '><div class="day" id="monday"></div><div class="day" id="tuesday"></div><div class="day" id="wednesday"></div><div class="day" id="thursday"></div><div class="day" id="friday"></div><div class="day" id="saturday"></div><div class="day" id="sunday"></div></div>')
     }
 
-    /*  Reset days to make everything clean in the HTML file */
+
     for (let i = 0; i < Object.keys(readDays).length; i++) {
       $('#' + Object.keys(readDays)[i].toLowerCase()).empty()
     }
 
-    /* We need to get the start_time values in order to sort the lessons */
+
     for (let i = 0; i < Object.keys(readDays).length; i++) {
       if (Object.keys(readDays)[i] === 'Monday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "MONDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesMonday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Tuesday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "TUESDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesTuesday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Wednesday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "WEDNESDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesWednesday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Thursday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "THURSDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesThursday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Friday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "FRIDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesFriday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Saturday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "SATURDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesSaturday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
       if (Object.keys(readDays)[i] === 'Sunday') {
-        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) { // Loop through every day and get their start_times values - readDays[Object.keys(readDays)[i] == "SUNDAY" in this case
+        for (let j = 0; j < readDays[Object.keys(readDays)[i]].length; j++) {
           sortTimesSunday.push(readDays[Object.keys(readDays)[i]][j].start_time)
         }
       }
     }
-    /* Sort every array */
+
     sortTimesMonday.sort(CustomSort)
     sortTimesTuesday.sort(CustomSort)
     sortTimesWednesday.sort(CustomSort)
@@ -506,14 +547,14 @@ function readData () {
       }
     }
 
-    /* Append every lesson (Same with every day) */
-    for (let i = 0; i < sortTimesMonday.length; i++) { // -> Loop through sortTimesMonday
-      for (let k = 0; k < readDays['Monday'].length; k++) { // -> Loop through monday's lessons
+
+    for (let i = 0; i < sortTimesMonday.length; i++) {
+      for (let k = 0; k < readDays['Monday'].length; k++) {
         if (sortTimesMonday[i] === readDays['Monday'][k].start_time) {
-          for (let j = 0; j < weeks.length; j++) { // -> Append the lesson to the perfect week, if week == A, then we'll append the lesson to week A
+          for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Monday'][k].week) {
-              $('#week' + weeks[j] + ' #monday').append('<div class="lesson" style="background:' + readDays['Monday'][k].bgColor + '"><i id="Monday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Monday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Monday'][k].start_time + '-' + readDays['Monday'][k].finish_time + '</p><p id="className">' + readDays['Monday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Monday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Monday'][k].class_room + '</p></div>')
-              delete readDays['Monday'][k].start_time // -> We have to delete start_time from the array, because this condition -> !sortTimesMonday[i] == readDays["Monday"][k].start_time! -> would always happen
+              $('#week' + weeks[j] + ' #monday').append('<div class="lesson"><div class="sideColor" style="background:' + readDays['Monday'][k].bgColor + '"></div><i id="Monday-' + k + '" class="icon-garbage deleteItem"></i><i id="Monday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Monday'][k].start_time + '-' + readDays['Monday'][k].finish_time + '</p><p id="className">' + readDays['Monday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Monday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Monday'][k].class_room + '</p></div>')
+              delete readDays['Monday'][k].start_time
               break
             }
           }
@@ -525,7 +566,7 @@ function readData () {
         if (sortTimesTuesday[i] === readDays['Tuesday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Tuesday'][k].week) {
-              $('#week' + weeks[j] + ' #tuesday').append('<div class="lesson" style="background:' + readDays['Tuesday'][k].bgColor + '"><i id="Tuesday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Tuesday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Tuesday'][k].start_time + '-' + readDays['Tuesday'][k].finish_time + '</p><p id="className">' + readDays['Tuesday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Tuesday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Tuesday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #tuesday').append('<div class="lesson"><div class="sideColor" style="background:' + readDays['Tuesday'][k].bgColor + '"></div><i id="Tuesday-' + k + '" class="icon-garbage deleteItem"></i><i id="Tuesday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Tuesday'][k].start_time + '-' + readDays['Tuesday'][k].finish_time + '</p><p id="className">' + readDays['Tuesday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Tuesday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Tuesday'][k].class_room + '</p></div>')
               delete readDays['Tuesday'][k].start_time
               break
             }
@@ -538,7 +579,7 @@ function readData () {
         if (sortTimesWednesday[i] === readDays['Wednesday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Wednesday'][k].week) {
-              $('#week' + weeks[j] + ' #wednesday').append('<div class="lesson" style="background:' + readDays['Wednesday'][k].bgColor + '"><i id="Wednesday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Wednesday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Wednesday'][k].start_time + '-' + readDays['Wednesday'][k].finish_time + '</p><p id="className">' + readDays['Wednesday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Wednesday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Wednesday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #wednesday').append('<div class="lesson"><div class="sideColor" style="background:' + readDays['Wednesday'][k].bgColor + '"></div><i id="Wednesday-' + k + '" class="icon-garbage deleteItem"></i><i id="Wednesday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Wednesday'][k].start_time + '-' + readDays['Wednesday'][k].finish_time + '</p><p id="className">' + readDays['Wednesday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Wednesday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Wednesday'][k].class_room + '</p></div>')
               delete readDays['Wednesday'][k].start_time
               break
             }
@@ -551,7 +592,7 @@ function readData () {
         if (sortTimesThursday[i] === readDays['Thursday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Thursday'][k].week) {
-              $('#week' + weeks[j] + ' #thursday').append('<div class="lesson" style="background:' + readDays['Thursday'][k].bgColor + '"><i id="Thursday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Thursday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Thursday'][k].start_time + '-' + readDays['Thursday'][k].finish_time + '</p><p id="className">' + readDays['Thursday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Thursday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Thursday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #thursday').append('<div class="lesson"><div class="sideColor" style="background:' + readDays['Thursday'][k].bgColor + '"></div><i id="Thursday-' + k + '" class="icon-garbage deleteItem"></i><i id="Thursday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Thursday'][k].start_time + '-' + readDays['Thursday'][k].finish_time + '</p><p id="className">' + readDays['Thursday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Thursday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Thursday'][k].class_room + '</p></div>')
               delete readDays['Thursday'][k].start_time
               break
             }
@@ -564,7 +605,7 @@ function readData () {
         if (sortTimesFriday[i] === readDays['Friday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Friday'][k].week) {
-              $('#week' + weeks[j] + ' #friday').append('<div class="lesson" style="background:' + readDays['Friday'][k].bgColor + '"><i id="Friday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Friday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Friday'][k].start_time + '-' + readDays['Friday'][k].finish_time + '</p><p id="className">' + readDays['Friday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Friday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Friday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #friday').append('<div class="lesson"><div class="sideColor" style="background:' + readDays['Friday'][k].bgColor + '"></div><i id="Friday-' + k + '" class="icon-garbage deleteItem"></i><i id="Friday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Friday'][k].start_time + '-' + readDays['Friday'][k].finish_time + '</p><p id="className">' + readDays['Friday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Friday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Friday'][k].class_room + '</p></div>')
               delete readDays['Friday'][k].start_time
               break
             }
@@ -577,7 +618,7 @@ function readData () {
         if (sortTimesSaturday[i] === readDays['Saturday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Saturday'][k].week) {
-              $('#week' + weeks[j] + ' #saturday').append('<div class="lesson" style="background:' + readDays['Saturday'][k].bgColor + '"><i id="Saturday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Saturday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Saturday'][k].start_time + '-' + readDays['Saturday'][k].finish_time + '</p><p id="className">' + readDays['Saturday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Saturday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Saturday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #saturday').append('<div class="lesson" style="background:' + readDays['Saturday'][k].bgColor + '"><i id="Saturday-' + k + '" class="icon-garbage deleteItem"></i><i id="Saturday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Saturday'][k].start_time + '-' + readDays['Saturday'][k].finish_time + '</p><p id="className">' + readDays['Saturday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Saturday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Saturday'][k].class_room + '</p></div>')
               delete readDays['Saturday'][k].start_time
               break
             }
@@ -590,7 +631,7 @@ function readData () {
         if (sortTimesSunday[i] === readDays['Sunday'][k].start_time) {
           for (let j = 0; j < weeks.length; j++) {
             if (weeks[j] === readDays['Sunday'][k].week) {
-              $('#week' + weeks[j] + ' #sunday').append('<div class="lesson" style="background:' + readDays['Sunday'][k].bgColor + '"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><p id="time">' + readDays['Sunday'][k].start_time + '-' + readDays['Sunday'][k].finish_time + '</p><p id="className">' + readDays['Sunday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Sunday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Sunday'][k].class_room + '</p></div>')
+              $('#week' + weeks[j] + ' #sunday').append('<div class="lesson" style="background:' + readDays['Sunday'][k].bgColor + '"><i id="Sunday-' + k + '" class="icon-garbage deleteItem"></i><i id="Sunday-' + k + '" class="icon-edit editItem"></i><p id="time">' + readDays['Sunday'][k].start_time + '-' + readDays['Sunday'][k].finish_time + '</p><p id="className">' + readDays['Sunday'][k].lesson_name + '</p><p id="teacherName">' + readDays['Sunday'][k].teacher_name + '</p><p id="classRoom">' + readDays['Sunday'][k].class_room + '</p></div>')
               delete readDays['Sunday'][k].start_time
               break
             }
@@ -598,28 +639,45 @@ function readData () {
         }
       }
     }
-    /* End of Append */
 
-    /* Set selected week */
     for (let i = 0; i < weeks.length; i++) {
       $('#week' + weeks[i]).css('display', 'none')
     }
-    if (currentWeekIndex == null) { // -> Load default week
+    if (currentWeekIndex == null) {
       $('#week' + weeks[0]).css('display', 'block')
       if (weeks[0] == null) {
-        $('.selectedWeek p').text('No lessons to load').css('font-size', '12px')
+        $('.selectedWeek').text('No lessons to load').css('font-size', '16px')
       } else {
-        $('.selectedWeek p').text('Week ' + weeks[0]).css('font-size', '16px')
+        $('.selectedWeek').text('Week ' + weeks[0]).css('font-size', '20px')
       }
     } else {
       $('#week' + currentWeekIndex).css('display', 'block')
-      $('.selectedWeek p').text('Week ' + currentWeekIndex).css('font-size', '16px')
+      $('.selectedWeek').text('Week ' + currentWeekIndex).css('font-size', '20px')
     }
   })
+
+  let date = new Date()
+  let dayNum = date.getDay()
+
+  if(dayNum == 0)
+    $('#day0').css('color','#00FF88')
+  if(dayNum == 1)
+    $('#day1').css('color','#00FF88')
+  if(dayNum == 2)
+    $('#day2').css('color','#00FF88')
+  if(dayNum == 3)
+    $('#day3').css('color','#00FF88')
+  if(dayNum == 4)
+    $('#day4').css('color','#00FF88')
+  if(dayNum == 5)
+    $('#day5').css('color','#00FF88')
+  if(dayNum == 6)
+    $('#day6').css('color','#00FF88')
+
 }
 
 $(document).ready(function () {
-  readData() // -> Call readData()
+  readData()
 })
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -627,7 +685,6 @@ $(document).ready(function () {
 /// /////////////////////////////////////////////////////////////////////////////
 
 $('.addBTN').on('click', () => {
-  $('.bg').css('filter','blur(5px)')
   $('.addLessonOverlay').css('display', 'block')
   $('.addLessonOverlay').animate({
     'opacity': '1'
@@ -693,8 +750,8 @@ $('.addNewLesson').on('click', () => {
     allowLessonName = true
   }
   if ($('#teacher_name').val() === '') {
-    $('#teacher_name').css('border', '1px solid #DB2B39')
-    allowTeacherName = false
+    teacherName = ''
+    allowTeacherName = true
   } else {
     teacherName = $('#teacher_name').val()
     allowTeacherName = true
@@ -721,40 +778,40 @@ $('.addNewLesson').on('click', () => {
     allowDay = true
   }
   if ($('#bgColor').val() === '') {
-    bgColor = '#09BC8A'
+    bgColor = '#00FF88'
   } else {
     bgColor = $('#bgColor').val()
   }
 
   $('#start_time_h').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#start_time_mm').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#finish_time_h').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#finish_time_mm').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#lesson_name').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#teacher_name').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#class_room').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#week').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#day').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
   $('#bgColor').focus(function () {
-    $(this).css('border', 'none')
+    $(this).css('border', '1px solid white')
   })
 
   if (!allowStartTimeH || !allowStartTimeMM || !allowFinishTimeH || !allowFinishTimeMM || !allowLessonName || !allowTeacherName || !allowClassRoom || !allowWeek || !allowDay) {
@@ -764,10 +821,10 @@ $('.addNewLesson').on('click', () => {
   let startTime = startTimeH + ':' + startTimeMM
   let finishTime = finishTimeH + ':' + finishTimeMM
 
-  let newObj = {start_time: startTime, finish_time: finishTime, lesson_name: lessonName, teacher_name: teacherName, class_room: classRoom, week: week, bgColor: bgColor} // -> We will add this value to the json object
+  let newObj = {start_time: startTime, finish_time: finishTime, lesson_name: lessonName, teacher_name: teacherName, class_room: classRoom, week: week, bgColor: bgColor}
 
-  add3(day, newObj) // -> Add values
-  fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(readDaysWrite), () => { // -> Save values
+  add3(day, newObj)
+  fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(readDaysWrite), () => {
   })
 
   $('#start_time_h').val('1')
@@ -789,14 +846,12 @@ $('.addNewLesson').on('click', () => {
     $('.addLessonOverlay').css('display', 'none')
   }, 400)
 
-  $('.bg').css('filter','none')
-
   readData() // -> Refresh table
 })
 
-/// /////////////////////////////////////////////////////////////////////////////
-/// //////////////////////        CHANGE WEEK          //////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////        CHANGE WEEK          //////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 $('body').on('click', '#weeks li', (event) => {
   var weekID = event.target.id
@@ -806,22 +861,21 @@ $('body').on('click', '#weeks li', (event) => {
   }
 
   $('#week' + weekID).css('display', 'block')
-  $('.selectedWeek p').text('Week ' + weekID).css('font-size', '16px')
+  $('.selectedWeek').text('Week ' + weekID).css('font-size', '20px')
   currentWeekIndex = weekID
 })
 
-/// /////////////////////////////////////////////////////////////////////////////
-/// //////////////////////        EDIT LESSON          //////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////        EDIT LESSON          //////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 $('body').on('click', '.editItem', (event) => {
-  $('.bg').css('filter','blur(5px)')
   $('.editLessonOverlay').css('display', 'block')
   $('.editLessonOverlay').animate({
     'opacity': '1'
   }, 400)
 
-  clickedId = event.target.id.split('-') // -> Split id to get the day and lesson id
+  clickedId = event.target.id.split('-')
 
   let startTime = readDaysWrite[clickedId[0]][clickedId[1]].start_time
   let startTimeSplitted = startTime.split(':')
@@ -846,7 +900,6 @@ $('body').on('click', '.editItem', (event) => {
 })
 
 $('.editLesson').on('click', '', function (event) {
-  $('.bg').css('filter','none')
   let startTimeH = $('.editLessonOverlay .innerBox #start_time_h').val()
   let startTimeMM = $('.editLessonOverlay .innerBox #start_time_mm').val()
   let finishTimeH = $('.editLessonOverlay .innerBox #finish_time_h').val()
@@ -880,13 +933,14 @@ $('.editLesson').on('click', '', function (event) {
   }, 400)
 
   canEdit = false
+  $('.editBTN i').css('color', 'white')
 
   readData()
 })
 
-/// /////////////////////////////////////////////////////////////////////////////
-/// //////////////////////       DELETE LESSON        ///////////////////////////
-/// /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////       DELETE LESSON        ///////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 $('body').on('click', '.deleteItem', (event) => {
   let clickedId = event.target.id.split('-')
@@ -897,5 +951,55 @@ $('body').on('click', '.deleteItem', (event) => {
   fs.writeFile(app.getPath('userData') + '/settings.json', JSON.stringify(readDaysWrite), () => {
   })
   canDelete = false
+  $('.deleteBTN i').css('color', 'white')
+
   readData()
+})
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////       IMPORT EXPORT        //////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+$('.importexportBTN').on('click', () => {
+  $('.importexportOverlay').css('display', 'block')
+  $('.importexportOverlay').animate({
+    'opacity': '1'
+  }, 400)
+})
+
+$(".exportTimetableBTN").click(function() {
+  dialog.showOpenDialog({
+    properties: ['openDirectory'] }, function (filePath) {
+      fs.createReadStream(app.getPath('userData')+'/settings.json').pipe(fs.createWriteStream(filePath+'/settings.json'))
+      $('.importexportOverlay').animate({
+        'opacity': '0'
+      }, 400)
+
+      setTimeout(function () {
+        $('.importexportOverlay').css('display', 'none')
+      }, 400)
+    }
+  );
+})
+
+$(".importTimetableBTN").click(function() {
+  dialog.showOpenDialog({
+    properties: ['openFile'] }, function (filePath) {
+      let splitted = filePath.toString().split('\\')
+      if (splitted[splitted.length-1] === 'settings.json') {
+        fs.createReadStream(filePath.toString()).pipe(fs.createWriteStream(app.getPath('userData')+'/settings.json'))
+        $('.importexportOverlay .error').html('')
+        $('.importexportOverlay').animate({
+          'opacity': '0'
+        }, 400)
+
+        setTimeout(function () {
+          $('.importexportOverlay').css('display', 'none')
+        }, 400)
+        readData()
+      } else {
+        $('.importexportOverlay .error').html('Invalid file <span>(Required: settings.json)</span>')
+      }
+    }
+  );
 })

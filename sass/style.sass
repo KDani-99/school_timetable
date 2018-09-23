@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700')
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,600')
+@import url('https://fonts.googleapis.com/css?family=Exo+2:300')
 
-$black: #23232E
-$gray: #2B2C38
-$lightgray: #8B8DA1
-$green: #09BC8A
+@mixin font($family,$size,$weight,$color)
+  font-family: $family
+  font-size: $size
+  font-weight: $weight
+  color: $color
+
+$gray: #2a2a2a
+$green: #00FF88
 $red: #DB2B39
-$blue: #103C75
-$yellow: #D8C141
-$orange: #EE6352
 
 *
   margin: 0
@@ -20,13 +20,269 @@ body
   overflow-x: hidden
   overflow-y: hidden
 
+::placeholder
+  color: white
+
+::selection
+  color: $gray
+  background: $green
+
+::-webkit-scrollbar
+  width: 10px
+  background: tranparent
+
+::-webkit-scrollbar-thumb
+  background: $gray
+  border: 5px solid transparent
+  &:hover
+    background: #474747
+
+////////////////////////////////////////////////////////////////////////////////
+
+.bg
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  &:after
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    width: 100vw
+    height: 100vh
+    background: #2a2a2a
+    opacity: .6
+
+.topbar
+  z-index: 99
+  position: absolute
+  top: 0
+  left: 0
+  width: 100vw
+  height: 50px
+  background: #2a2a2a
+
+  ul
+    position: absolute
+    top: 0
+    left: 0
+    width: auto
+    height: 100%
+
+    li
+      position: relative
+      float: left
+      width: auto
+      padding-left: 10px
+      padding-right: 10px
+      height: 100%
+      list-style: none
+      // background: gray
+      margin: 0 10px 0 10px
+      cursor: pointer
+      &:hover
+        i
+          color: $green !important
+
+      i
+        cursor: pointer
+        line-height: 60px
+        font-size: 24px
+        color: white
+
+    .selectedWeek
+      line-height: 50px
+      text-align: center
+      cursor: default
+      @include font('Exo 2',22px,300,#00FF88)
+
+  .exitBTN
+    position: absolute
+    top: 0
+    right: 0
+    width: 50px
+    height: 100%
+    cursor: pointer
+    text-align: center
+    &:hover
+      i
+        color: #FF3243
+
+    i
+      cursor: pointer
+      line-height: 60px
+      font-size: 22px
+      color: white
+
+  .minimizeBTN
+    cursor: pointer
+    position: absolute
+    top: 0
+    right: 50px
+    width: 50px
+    height: 100%
+    &:hover
+      i
+        color: $green
+
+    i
+      cursor: pointer
+      line-height: 60px
+      font-size: 26px
+      color: white
+
+
+  #weeks
+    position: absolute
+    top: 100px
+    left: -10px
+    width: 14.28vw
+    height: auto
+    cursor: pointer
+    @include font('Exo 2', 20px, 300, white)
+    z-index: 100
+    display: none
+
+    li
+      list-style: none
+      text-align: center
+      line-height: 40px
+      width: 100%
+      height: 40px
+      background: $gray
+      cursor: pointer
+      &:hover
+        color: $green
+
+.daysBar
+  z-index: 90
+  position: absolute
+  top: 50px
+  left: 0
+  width: 100vw
+  height: 50px
+  background: #2a2a2a
+
+  ul
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+    li
+      position: relative
+      float: left
+      width: 14.28%
+      height: 100%
+      list-style: none
+      text-align: center
+      line-height: 50px
+      text-transform: uppercase
+      @include font('Exo 2',22px,300,white)
+      &:nth-child(1)
+        // background: red
+
+.container
+  position: absolute
+  top: 100px
+  left: 0
+  width: 100vw
+  height: calc(100vh - 120px)
+  padding-top: 20px
+  // background: red
+
+  .innerContainer
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: calc(100% - 20px)
+    padding-top: 20px
+    overflow-y: auto
+
+    .week
+      position: absolute
+      left: 0
+      width: 100%
+
+      .day
+        position: relative
+        float: left
+        width: 14.28%
+        height: auto
+        // background: blue
+
+        .lesson
+          position: relative
+          width: 80%
+          height: 100px
+          // border: 1px solid white
+          margin: 0 auto 30px
+
+          .sideColor
+            position: absolute
+            top: 0
+            left: 0
+            width: 10px
+            height: 100%
+            background: $green
+
+          #className
+            position: absolute
+            top: 0
+            left: 20px
+            @include font('Exo 2',20px,300,white)
+
+          #classRoom
+            position: absolute
+            bottom: 0
+            left: 20px
+            @include font('Exo 2',18px,300,white)
+
+          #teacherName
+            position: absolute
+            bottom: 25px
+            left: 20px
+            @include font('Exo 2',18px,300,white)
+
+          #time
+            position: absolute
+            bottom: 0
+            right: 0
+            @include font('Exo 2',18px,300,white)
+
+          .deleteItem
+            display: none
+            position: absolute
+            bottom: 20px
+            right: 0
+            font-size: 22px
+            color: white
+            cursor: pointer
+            &:hover
+              color: $green
+
+          .editItem
+            display: none
+            position: absolute
+            bottom: 20px
+            right: 30px
+            font-size: 22px
+            color: white
+            cursor: pointer
+            &:hover
+              color: $green
+
 .addLessonOverlay
   position: absolute
   top: 0
   left: 0
   width: 100vw
   height: 100vh
-  background: rgba(0,0,0,.8)
+  background: rgba(42,42,42,.9)
   z-index: 9999
   display: none
   opacity: 0
@@ -36,62 +292,69 @@ body
     top: 50%
     left: 50%
     transform: translate(-50%,-50%)
-    width: 400px
+    width: 530px
     height: 500px
-    background: $black
-    border-radius: 20px
 
     #exitOverlay
-      font-size: 20px
-      color: $lightgray
+      font-size: 24px
+      color: white
       position: absolute
-      top: 15px
-      right: 15px
+      top: -60px
+      right: -60px
       cursor: pointer
+      &:hover
+        color: $green
+
+    h1
+      position: absolute
+      top: -60px
+      left: 20px
+      @include font('Exo 2',25px,300,white)
 
     input[type="text"]
-      width: 220px
+      width: 190px
       height: 40px
-      background: $gray
-      // border-radius: 8px
-      border: none
+      // border-radius: 4px
+      background: transparent
+      border: 1px solid white
       outline: none
-      color: $lightgray
       position: absolute
-      left: 50%
-      transform: translateX(-50%)
-      font-family: Roboto
-      font-size: 16px
+      // left: 50%
+      // transform: translateX(-50%)
+      @include font('Exo 2',16px,300,white)
       padding-left: 15px
       padding-right: 15px
       cursor: text
+      &:focus
+        border-color: $green !important
 
     select
-      width: 250px
+      width: 220px
       height: 40px
-      background: $gray
-      border-radius: 0px
-      border: none
+      background: #2a2a2a
+      // border-radius: 4px
+      border: 1px solid white
       outline: none
-      color: $lightgray
-      font-family: Roboto
+      color: white
+      font-family: 'Exo 2'
       font-size: 16px
       cursor: pointer
+      &:focus
+        border-color: $green !important
 
     .startTime
       position: absolute
       top: 20px
-      left: 50%
-      transform: translateX(-50%)
-      width: 250px
+      left: 20px
+      // transform: translateX(-50%)
+      width: 220px
       height: 40px
 
       p
         line-height: 40px
-        color: $lightgray
-        font-family: Raleway
+        color: white
+        font-family: 'Exo 2'
         font-size: 16px
-        font-weight: 400
 
       #start_time_h
         position: absolute
@@ -107,18 +370,16 @@ body
 
     .finishTime
       position: absolute
-      top: 70px
-      left: 50%
-      transform: translateX(-50%)
-      width: 250px
+      top: 20px
+      right: 20px
+      width: 220px
       height: 40px
 
       p
         line-height: 40px
-        color: $lightgray
-        font-family: Raleway
+        color: white
+        font-family: 'Exo 2'
         font-size: 16px
-        font-weight: 400
 
       #finish_time_h
         position: absolute
@@ -133,47 +394,50 @@ body
         width: 60px
 
     #lesson_name
-      position: absolute
-      top: 130px
+      top: 80px
+      left: 20px
 
     #teacher_name
-      position: absolute
-      top: 180px
+      top: 80px
+      right: 20px
 
     #class_room
-      position: absolute
-      top: 230px
+      top: 140px
+      left: 20px
 
     #week
-      position: absolute
-      top: 280px
+      top: 140px
+      right: 20px
 
     #day
       position: absolute
-      top: 330px
-      position: absolute
-      left: 50%
-      transform: translateX(-50%)
+      top: 200px
+      left: 20px
 
     #bgColor
-      position: absolute
-      top: 380px
+      top: 200px
+      right: 20px
 
     .addNewLesson
       position: absolute
-      top: 430px
-      left: 50%
-      transform: translateX(-50%)
-      background: $gray
-      width: 250px
+      top: 400px
+      right: 20px
+      background: transparent
+      width: 220px
       height: 40px
       border: none
       outline: none
       cursor: pointer
-      font-family: Raleway
+      font-family: 'Exo 2'
       font-size: 18px
-      color: white
-      background: $green
+      color: $green
+      border: 1px solid $green
+      &:hover
+        background: $green
+        color: $gray
+      &:focus
+        background: $green
+        color: $gray
 
 .editLessonOverlay
   position: absolute
@@ -181,7 +445,7 @@ body
   left: 0
   width: 100vw
   height: 100vh
-  background: rgba(0,0,0,.8)
+  background: rgba(42,42,42,.9)
   z-index: 9999
   display: none
   opacity: 0
@@ -191,62 +455,66 @@ body
     top: 50%
     left: 50%
     transform: translate(-50%,-50%)
-    width: 400px
+    width: 530px
     height: 500px
-    background: $black
-    border-radius: 20px
 
     #exitOverlay
-      font-size: 20px
-      color: $lightgray
+      font-size: 24px
+      color: white
       position: absolute
-      top: 15px
-      right: 15px
+      top: -60px
+      right: -60px
       cursor: pointer
+      &:hover
+        color: $green
+
+    h1
+      position: absolute
+      top: -60px
+      left: 20px
+      @include font('Exo 2',25px,300,white)
 
     input[type="text"]
-      width: 220px
+      width: 190px
       height: 40px
-      background: $gray
-      // border-radius: 8px
-      border: none
+      // border-radius: 4px
+      background: transparent
+      border: 1px solid white
       outline: none
-      color: $lightgray
       position: absolute
-      left: 50%
-      transform: translateX(-50%)
-      font-family: Roboto
-      font-size: 16px
+      @include font('Exo 2',16px,300,white)
       padding-left: 15px
       padding-right: 15px
       cursor: text
+      &:focus
+        border-color: $green
 
     select
-      width: 250px
+      width: 220px
       height: 40px
-      background: $gray
-      border-radius: 0px
-      border: none
+      background: #2a2a2a
+      // border-radius: 4px
+      border: 1px solid white
       outline: none
-      color: $lightgray
-      font-family: Roboto
+      color: white
+      font-family: 'Exo 2'
       font-size: 16px
       cursor: pointer
+      &:focus
+        border-color: $green
 
     .startTime
       position: absolute
       top: 20px
-      left: 50%
-      transform: translateX(-50%)
-      width: 250px
+      left: 20px
+      width: 220px
       height: 40px
 
       p
         line-height: 40px
-        color: $lightgray
-        font-family: Raleway
+        color: white
+        font-family: 'Exo 2'
         font-size: 16px
-        font-weight: 400
 
       #start_time_h
         position: absolute
@@ -262,18 +530,16 @@ body
 
     .finishTime
       position: absolute
-      top: 70px
-      left: 50%
-      transform: translateX(-50%)
-      width: 250px
+      top: 20px
+      right: 20px
+      width: 220px
       height: 40px
 
       p
         line-height: 40px
-        color: $lightgray
-        font-family: Raleway
+        color: white
+        font-family: 'Exo 2'
         font-size: 16px
-        font-weight: 400
 
       #finish_time_h
         position: absolute
@@ -288,377 +554,274 @@ body
         width: 60px
 
     #lesson_name
-      position: absolute
-      top: 130px
+      top: 80px
+      left: 20px
 
     #teacher_name
-      position: absolute
-      top: 180px
+      top: 80px
+      right: 20px
 
     #class_room
-      position: absolute
-      top: 230px
+      top: 140px
+      left: 20px
 
     #week
-      position: absolute
-      top: 280px
+      top: 140px
+      right: 20px
 
     #bgColor
-      position: absolute
-      top: 330px
+      top: 200px
+      left: 20px
 
     .editLesson
       position: absolute
-      top: 380px
-      left: 50%
-      transform: translateX(-50%)
-      background: $gray
-      width: 250px
+      top: 400px
+      right: 20px
+      background: transparent
+      width: 220px
       height: 40px
       border: none
       outline: none
       cursor: pointer
-      font-family: Raleway
+      font-family: 'Exo 2'
       font-size: 18px
-      color: white
-      background: $green
+      color: $green
+      border: 1px solid $green
+      &:hover
+        background: $green
+        color: #2a2a2a
+      &:focus
+        background: $green
+        color: #2a2a2a
 
-.hideOverlay
-  display: block
-
-.menubar
+.setBGOverlay
   position: absolute
   top: 0
   left: 0
   width: 100vw
-  height: 30px
-  background: $black
+  height: 100vh
+  background: rgba(42,42,42,.9)
+  z-index: 9999
+  display: none
+  opacity: 0
 
-  .deleteBTN
+  .innerBox
     position: absolute
-    top: 0
-    left: 600px
-    width: 150px
-    height: 30px
-    text-align: center
-    cursor: pointer
-    &:hover
-      i
-        color: $green
-    i
-      cursor: pointer
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%)
+    width: 530px
+    height: 500px
+
+    #exitOverlay
+      font-size: 24px
+      color: white
       position: absolute
-      top: 50%
-      left: 10px
-      transform: translateY(-50%)
-      font-size: 20px
-      color: $lightgray
-
-    p
-      cursor: pointer
-      font-family: Raleway
-      font-weight: 700
-      font-size: 14px
-      color: $lightgray
-      position: absolute
-      top: 50%
-      left: 40px
-      transform: translateY(-50%)
-
-  .addBTN
-    position: absolute
-    top: 0
-    left: 300px
-    width: 150px
-    height: 30px
-    cursor: pointer
-    &:hover
-      i
-        color: $green
-    i
-      cursor: pointer
-      position: absolute
-      top: 50%
-      left: 10px
-      transform: translateY(-50%)
-      font-size: 20px
-      color: $lightgray
-
-    p
-      cursor: pointer
-      font-family: Raleway
-      font-weight: 700
-      font-size: 14px
-      color: $lightgray
-      position: absolute
-      top: 50%
-      left: 40px
-      transform: translateY(-50%)
-
-  .editBTN
-    position: absolute
-    top: 0
-    left: 450px
-    width: 150px
-    height: 30px
-    text-align: center
-    cursor: pointer
-    &:hover
-      i
-        color: $green
-
-    i
-      cursor: pointer
-      position: absolute
-      top: 50%
-      left: 10px
-      transform: translateY(-50%)
-      font-size: 20px
-      color: $lightgray
-
-    p
-      cursor: pointer
-      font-family: Raleway
-      font-weight: 700
-      font-size: 14px
-      color: $lightgray
-      position: absolute
-      top: 50%
-      left: 40px
-      transform: translateY(-50%)
-
-  .changeWeekBTN
-    position: absolute
-    top: 0
-    left: 150px
-    width: 150px
-    height: 30px
-    text-align: center
-    cursor: pointer
-    &:hover
-      i
-        color: $green
-
-    i
-      cursor: pointer
-      position: absolute
-      top: 50%
-      left: 10px
-      transform: translateY(-50%)
-      font-size: 20px
-      color: $lightgray
-
-    p
-      cursor: pointer
-      font-family: Raleway
-      font-weight: 700
-      font-size: 14px
-      color: $lightgray
-      position: absolute
-      top: 50%
-      left: 40px
-      transform: translateY(-50%)
-
-  .selectedWeek
-    position: absolute
-    top: 0
-    left: 0
-    width: 150px
-    height: 30px
-    text-align: center
-
-    p
-      font-family: Raleway
-      font-weight: 700
-      font-size: 16px
-      color: $green
-      position: absolute
-      top: 50%
-      left: 40px
-      transform: translateY(-50%)
-
-
-  #weeks
-    position: absolute
-    top: 30px
-    left: 150px
-    width: 150px
-    height: auto
-    cursor: pointer
-    font-family: Raleway
-    font-size: 18px
-    font-weight: 700
-    color: $lightgray
-    text-align: center
-    line-height: 30px
-    width: 150px
-    height: 30px
-    background: $black
-    z-index: 90
-    display: none
-    &:hover
-      background: $gray
-
-    li
-      list-style: none
-      width: 100%
-      height: 30px
-      background: $black
+      top: -60px
+      right: -60px
       cursor: pointer
       &:hover
         color: $green
 
-  .exitBTN
-    position: absolute
-    top: 0
-    right: 0
-    width: 50px
-    height: 30px
-    cursor: pointer
-    text-align: center
-    &:hover
-      i
-        color: $green
+    h1
+      position: absolute
+      top: -60px
+      left: 20px
+      @include font('Exo 2',25px,300,white)
 
-    i
+    .chooseBG
+      position: absolute
+      top: 0
+      left: 20px
+      border: 1px solid white
+      width: 490px
+      height: 50px
       cursor: pointer
-      line-height: 30px
-      font-size: 24px
-      color: $lightgray
+      &:hover
+        border-color: $green
+        h1
+          color: $green
 
-.topbar
-  position: absolute
-  top: 30px
-  right: 0
-  width: 100vw
-  height: 50px
-  background: $gray
+      input
+        width: 100%
+        height: 100%
+        position: absolute
+        top: 0
+        left: 0
+        cursor: pointer
+        opacity: 0
+        z-index: 99
 
-  ul
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 50px
+      h1
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%,-50%)
+        @include font('Exo 2', 20px, 300, white)
 
-    li
-      position: relative
-      float: left
-      width: 14.28%
-      text-align: center
-      line-height: 50px
-      list-style: none
-      font-family: Raleway
-      font-weight: 700
+    .addBG
+      position: absolute
+      top: 400px
+      right: 20px
+      background: transparent
+      width: 220px
+      height: 40px
+      border: none
+      outline: none
+      cursor: pointer
+      font-family: 'Exo 2'
       font-size: 18px
-      color: $lightgray
+      color: $green
+      border: 1px solid $green
+      &:hover
+        background: $green
+        color: #2a2a2a
 
-.container
+    .bgChanger
+      position: absolute
+      top: 80px
+      left: 20px
+      width: 490px
+      height: 50px
+      // background: red
+
+      #bgSec
+        position: absolute
+        top: 50%
+        right: 0
+        transform: translateY(-50%)
+        width: 70px
+        height: 50px
+        border: 1px solid white
+        background: transparent
+        outline: none
+        text-align: center
+        @include font('Exo 2', 16px, 300, white)
+        &:focus
+          border-color: $green
+
+      h1
+        position: absolute
+        top: 50%
+        left: 0
+        transform: translateY(-50%)
+        @include font('Exo 2', 20px, 300, white)
+
+    .helpText
+      position: absolute
+      top: 150px
+      left: 20px
+      width: 490px
+      height: 80px
+      span
+        color: $green
+      h1
+        position: absolute
+        top: 0
+        left: 0
+        @include font('Exo 2', 15px, 300, white)
+
+    .staticColor
+      position: absolute
+      top: 250px
+      left: 20px
+      width: 490px
+      height: 50px
+      border: 1px solid white
+      background: transparent
+      outline: none
+      @include font('Exo 2', 15px, 300, white)
+      &:focus
+        border-color: $green
+
+.importexportOverlay
   position: absolute
-  top: 80px
+  top: 0
   left: 0
   width: 100vw
-  // height: 100vh
-  height: calc(100vh - #{80px})
-  padding-top: 10px
-  padding-left: 30px
-  padding-right: 30px
-  overflow: hidden
-  // background: blue
+  height: 100vh
+  background: rgba(42,42,42,.9)
+  z-index: 9999
+  display: none
+  opacity: 0
 
-  .innerContainer
-    background: #f2f2f2
+  .innerBox
     position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: calc(100% - #{10px})
-    padding-top: 10px
-    padding-left: 30px
-    padding-right: 30px
-    overflow-y: auto
-
-  .week
-    position: absolute
-    display: none
-    left: 0
-
-  .day
-    position: relative
-    float: left
-    width: 235px
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%)
+    width: 530px
     height: 500px
-    margin-left: 20px
-    margin-right: 20px
 
-    .lesson
-      position: relative
-      width: 100%
-      height: 100px
-      border-radius: 20px
-      margin-bottom: 40px
-      &:after
-        content: ''
-        position: absolute
-        bottom: -20px
-        left: 0
-        width: 100%
-        height: 1px
-        background: $lightgray
-      &:last-of-type:after
-        display: none
-
-    i
-      position: absolute
-      top: 10px
-      right: 10px
-      font-size: 25px
+    #exitOverlay
+      font-size: 24px
       color: white
-      display: none
+      position: absolute
+      top: -60px
+      right: -60px
       cursor: pointer
+      &:hover
+        color: $green
 
-    .hide
-      display: block
-
-    #className
+    h1
       position: absolute
-      top: 10px
-      left: 15px
-      font-family: Raleway
-      font-size: 20px
-      font-weight: 600
-      color: white
+      top: -60px
+      left: 20px
+      @include font('Exo 2',25px,300,white)
 
-    #teacherName
+    .error
       position: absolute
-      bottom: 10px
-      right: 15px
-      font-family: Roboto
-      font-size: 18px
-      font-weight: 400
-      color: white
+      top: 100px
+      left: 50%
+      transform: translateX(-50%)
+      white-space: nowrap
+      @include font('Exo 2', 20px, 300, white)
 
-    #classRoom
+      span
+        color: $red
+
+    .exportTimetableBTN
       position: absolute
-      bottom: 10px
-      left: 15px
-      font-family: Roboto
-      font-size: 18px
-      font-weight: 400
-      color: white
+      top: 0
+      left: 20px
+      width: 220px
+      height: 50px
+      border: 1px solid white
+      white-space: nowrap
+      text-align: center
+      cursor: pointer
+      &:hover
+        border-color: $green
+        h1
+          color: $green
 
-    #time
+      h1
+        cursor: pointer
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%,-50%)
+        @include font('Exo 2', 18px, 300, white)
+
+    .importTimetableBTN
       position: absolute
-      bottom: 40px
-      left: 15px
-      font-family: Roboto
-      font-size: 18px
-      font-weight: 400
-      color: white
+      top: 0
+      right: 20px
+      width: 220px
+      height: 50px
+      border: 1px solid white
+      white-space: nowrap
+      text-align: center
+      cursor: pointer
+      &:hover
+        border-color: $green
+        h1
+          color: $green
 
-@media screen and (max-width: 1360px)
-  .container
-    .innerContainer
-      .week
-      .day
-        width: 155px
+      h1
+        cursor: pointer
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%,-50%)
+        @include font('Exo 2', 18px, 300, white)

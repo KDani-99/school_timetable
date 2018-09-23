@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
-@import url("https://fonts.googleapis.com/css?family=Raleway:400,600");
+@import url("https://fonts.googleapis.com/css?family=Exo+2:300");
 * {
   margin: 0;
   padding: 0;
@@ -13,13 +12,268 @@ body {
   overflow-x: hidden;
   overflow-y: hidden; }
 
+::-webkit-input-placeholder {
+  color: white; }
+
+:-ms-input-placeholder {
+  color: white; }
+
+::-ms-input-placeholder {
+  color: white; }
+
+::placeholder {
+  color: white; }
+
+::-moz-selection {
+  color: #2a2a2a;
+  background: #00FF88; }
+
+::selection {
+  color: #2a2a2a;
+  background: #00FF88; }
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: tranparent; }
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border: 5px solid transparent; }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #474747; }
+
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; }
+  .bg:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #2a2a2a;
+    opacity: .6; }
+
+.topbar {
+  z-index: 99;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 50px;
+  background: #2a2a2a; }
+  .topbar ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 100%; }
+    .topbar ul li {
+      position: relative;
+      float: left;
+      width: auto;
+      padding-left: 10px;
+      padding-right: 10px;
+      height: 100%;
+      list-style: none;
+      margin: 0 10px 0 10px;
+      cursor: pointer; }
+      .topbar ul li:hover i {
+        color: #00FF88 !important; }
+      .topbar ul li i {
+        cursor: pointer;
+        line-height: 60px;
+        font-size: 24px;
+        color: white; }
+    .topbar ul .selectedWeek {
+      line-height: 50px;
+      text-align: center;
+      cursor: default;
+      font-family: "Exo 2";
+      font-size: 22px;
+      font-weight: 300;
+      color: #00FF88; }
+  .topbar .exitBTN {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 100%;
+    cursor: pointer;
+    text-align: center; }
+    .topbar .exitBTN:hover i {
+      color: #FF3243; }
+    .topbar .exitBTN i {
+      cursor: pointer;
+      line-height: 60px;
+      font-size: 22px;
+      color: white; }
+  .topbar .minimizeBTN {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 50px;
+    width: 50px;
+    height: 100%; }
+    .topbar .minimizeBTN:hover i {
+      color: #00FF88; }
+    .topbar .minimizeBTN i {
+      cursor: pointer;
+      line-height: 60px;
+      font-size: 26px;
+      color: white; }
+  .topbar #weeks {
+    position: absolute;
+    top: 100px;
+    left: -10px;
+    width: 14.28vw;
+    height: auto;
+    cursor: pointer;
+    font-family: "Exo 2";
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+    z-index: 100;
+    display: none; }
+    .topbar #weeks li {
+      list-style: none;
+      text-align: center;
+      line-height: 40px;
+      width: 100%;
+      height: 40px;
+      background: #2a2a2a;
+      cursor: pointer; }
+      .topbar #weeks li:hover {
+        color: #00FF88; }
+
+.daysBar {
+  z-index: 90;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100vw;
+  height: 50px;
+  background: #2a2a2a; }
+  .daysBar ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+    .daysBar ul li {
+      position: relative;
+      float: left;
+      width: 14.28%;
+      height: 100%;
+      list-style: none;
+      text-align: center;
+      line-height: 50px;
+      text-transform: uppercase;
+      font-family: "Exo 2";
+      font-size: 22px;
+      font-weight: 300;
+      color: white; }
+
+.container {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 120px);
+  padding-top: 20px; }
+  .container .innerContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 20px);
+    padding-top: 20px;
+    overflow-y: auto; }
+    .container .innerContainer .week {
+      position: absolute;
+      left: 0;
+      width: 100%; }
+      .container .innerContainer .week .day {
+        position: relative;
+        float: left;
+        width: 14.28%;
+        height: auto; }
+        .container .innerContainer .week .day .lesson {
+          position: relative;
+          width: 80%;
+          height: 100px;
+          margin: 0 auto 30px; }
+          .container .innerContainer .week .day .lesson .sideColor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: #00FF88; }
+          .container .innerContainer .week .day .lesson #className {
+            position: absolute;
+            top: 0;
+            left: 20px;
+            font-family: "Exo 2";
+            font-size: 20px;
+            font-weight: 300;
+            color: white; }
+          .container .innerContainer .week .day .lesson #classRoom {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            font-family: "Exo 2";
+            font-size: 18px;
+            font-weight: 300;
+            color: white; }
+          .container .innerContainer .week .day .lesson #teacherName {
+            position: absolute;
+            bottom: 25px;
+            left: 20px;
+            font-family: "Exo 2";
+            font-size: 18px;
+            font-weight: 300;
+            color: white; }
+          .container .innerContainer .week .day .lesson #time {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font-family: "Exo 2";
+            font-size: 18px;
+            font-weight: 300;
+            color: white; }
+          .container .innerContainer .week .day .lesson .deleteItem {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+            font-size: 22px;
+            color: white;
+            cursor: pointer; }
+            .container .innerContainer .week .day .lesson .deleteItem:hover {
+              color: #00FF88; }
+          .container .innerContainer .week .day .lesson .editItem {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 22px;
+            color: white;
+            cursor: pointer; }
+            .container .innerContainer .week .day .lesson .editItem:hover {
+              color: #00FF88; }
+
 .addLessonOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(42, 42, 42, 0.9);
   z-index: 9999;
   display: none;
   opacity: 0; }
@@ -30,60 +284,64 @@ body {
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    width: 400px;
-    height: 500px;
-    background: #23232E;
-    border-radius: 20px; }
+    width: 530px;
+    height: 500px; }
     .addLessonOverlay .innerBox #exitOverlay {
-      font-size: 20px;
-      color: #8B8DA1;
+      font-size: 24px;
+      color: white;
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: -60px;
+      right: -60px;
       cursor: pointer; }
-    .addLessonOverlay .innerBox input[type="text"] {
-      width: 220px;
-      height: 40px;
-      background: #2B2C38;
-      border: none;
-      outline: none;
-      color: #8B8DA1;
+      .addLessonOverlay .innerBox #exitOverlay:hover {
+        color: #00FF88; }
+    .addLessonOverlay .innerBox h1 {
       position: absolute;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      font-family: Roboto;
+      top: -60px;
+      left: 20px;
+      font-family: "Exo 2";
+      font-size: 25px;
+      font-weight: 300;
+      color: white; }
+    .addLessonOverlay .innerBox input[type="text"] {
+      width: 190px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid white;
+      outline: none;
+      position: absolute;
+      font-family: "Exo 2";
       font-size: 16px;
+      font-weight: 300;
+      color: white;
       padding-left: 15px;
       padding-right: 15px;
       cursor: text; }
+      .addLessonOverlay .innerBox input[type="text"]:focus {
+        border-color: #00FF88 !important; }
     .addLessonOverlay .innerBox select {
-      width: 250px;
+      width: 220px;
       height: 40px;
-      background: #2B2C38;
-      border-radius: 0px;
-      border: none;
+      background: #2a2a2a;
+      border: 1px solid white;
       outline: none;
-      color: #8B8DA1;
-      font-family: Roboto;
+      color: white;
+      font-family: 'Exo 2';
       font-size: 16px;
       cursor: pointer; }
+      .addLessonOverlay .innerBox select:focus {
+        border-color: #00FF88 !important; }
     .addLessonOverlay .innerBox .startTime {
       position: absolute;
       top: 20px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      width: 250px;
+      left: 20px;
+      width: 220px;
       height: 40px; }
       .addLessonOverlay .innerBox .startTime p {
         line-height: 40px;
-        color: #8B8DA1;
-        font-family: Raleway;
-        font-size: 16px;
-        font-weight: 400; }
+        color: white;
+        font-family: 'Exo 2';
+        font-size: 16px; }
       .addLessonOverlay .innerBox .startTime #start_time_h {
         position: absolute;
         top: 0;
@@ -96,19 +354,15 @@ body {
         width: 60px; }
     .addLessonOverlay .innerBox .finishTime {
       position: absolute;
-      top: 70px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      width: 250px;
+      top: 20px;
+      right: 20px;
+      width: 220px;
       height: 40px; }
       .addLessonOverlay .innerBox .finishTime p {
         line-height: 40px;
-        color: #8B8DA1;
-        font-family: Raleway;
-        font-size: 16px;
-        font-weight: 400; }
+        color: white;
+        font-family: 'Exo 2';
+        font-size: 16px; }
       .addLessonOverlay .innerBox .finishTime #finish_time_h {
         position: absolute;
         top: 0;
@@ -120,45 +374,44 @@ body {
         right: 0px;
         width: 60px; }
     .addLessonOverlay .innerBox #lesson_name {
-      position: absolute;
-      top: 130px; }
+      top: 80px;
+      left: 20px; }
     .addLessonOverlay .innerBox #teacher_name {
-      position: absolute;
-      top: 180px; }
+      top: 80px;
+      right: 20px; }
     .addLessonOverlay .innerBox #class_room {
-      position: absolute;
-      top: 230px; }
+      top: 140px;
+      left: 20px; }
     .addLessonOverlay .innerBox #week {
-      position: absolute;
-      top: 280px; }
+      top: 140px;
+      right: 20px; }
     .addLessonOverlay .innerBox #day {
       position: absolute;
-      top: 330px;
-      position: absolute;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%); }
+      top: 200px;
+      left: 20px; }
     .addLessonOverlay .innerBox #bgColor {
-      position: absolute;
-      top: 380px; }
+      top: 200px;
+      right: 20px; }
     .addLessonOverlay .innerBox .addNewLesson {
       position: absolute;
-      top: 430px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      background: #2B2C38;
-      width: 250px;
+      top: 400px;
+      right: 20px;
+      background: transparent;
+      width: 220px;
       height: 40px;
       border: none;
       outline: none;
       cursor: pointer;
-      font-family: Raleway;
+      font-family: 'Exo 2';
       font-size: 18px;
-      color: white;
-      background: #09BC8A; }
+      color: #00FF88;
+      border: 1px solid #00FF88; }
+      .addLessonOverlay .innerBox .addNewLesson:hover {
+        background: #00FF88;
+        color: #2a2a2a; }
+      .addLessonOverlay .innerBox .addNewLesson:focus {
+        background: #00FF88;
+        color: #2a2a2a; }
 
 .editLessonOverlay {
   position: absolute;
@@ -166,7 +419,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(42, 42, 42, 0.9);
   z-index: 9999;
   display: none;
   opacity: 0; }
@@ -177,60 +430,64 @@ body {
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    width: 400px;
-    height: 500px;
-    background: #23232E;
-    border-radius: 20px; }
+    width: 530px;
+    height: 500px; }
     .editLessonOverlay .innerBox #exitOverlay {
-      font-size: 20px;
-      color: #8B8DA1;
+      font-size: 24px;
+      color: white;
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: -60px;
+      right: -60px;
       cursor: pointer; }
-    .editLessonOverlay .innerBox input[type="text"] {
-      width: 220px;
-      height: 40px;
-      background: #2B2C38;
-      border: none;
-      outline: none;
-      color: #8B8DA1;
+      .editLessonOverlay .innerBox #exitOverlay:hover {
+        color: #00FF88; }
+    .editLessonOverlay .innerBox h1 {
       position: absolute;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      font-family: Roboto;
+      top: -60px;
+      left: 20px;
+      font-family: "Exo 2";
+      font-size: 25px;
+      font-weight: 300;
+      color: white; }
+    .editLessonOverlay .innerBox input[type="text"] {
+      width: 190px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid white;
+      outline: none;
+      position: absolute;
+      font-family: "Exo 2";
       font-size: 16px;
+      font-weight: 300;
+      color: white;
       padding-left: 15px;
       padding-right: 15px;
       cursor: text; }
+      .editLessonOverlay .innerBox input[type="text"]:focus {
+        border-color: #00FF88; }
     .editLessonOverlay .innerBox select {
-      width: 250px;
+      width: 220px;
       height: 40px;
-      background: #2B2C38;
-      border-radius: 0px;
-      border: none;
+      background: #2a2a2a;
+      border: 1px solid white;
       outline: none;
-      color: #8B8DA1;
-      font-family: Roboto;
+      color: white;
+      font-family: 'Exo 2';
       font-size: 16px;
       cursor: pointer; }
+      .editLessonOverlay .innerBox select:focus {
+        border-color: #00FF88; }
     .editLessonOverlay .innerBox .startTime {
       position: absolute;
       top: 20px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      width: 250px;
+      left: 20px;
+      width: 220px;
       height: 40px; }
       .editLessonOverlay .innerBox .startTime p {
         line-height: 40px;
-        color: #8B8DA1;
-        font-family: Raleway;
-        font-size: 16px;
-        font-weight: 400; }
+        color: white;
+        font-family: 'Exo 2';
+        font-size: 16px; }
       .editLessonOverlay .innerBox .startTime #start_time_h {
         position: absolute;
         top: 0;
@@ -243,19 +500,15 @@ body {
         width: 60px; }
     .editLessonOverlay .innerBox .finishTime {
       position: absolute;
-      top: 70px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      width: 250px;
+      top: 20px;
+      right: 20px;
+      width: 220px;
       height: 40px; }
       .editLessonOverlay .innerBox .finishTime p {
         line-height: 40px;
-        color: #8B8DA1;
-        font-family: Raleway;
-        font-size: 16px;
-        font-weight: 400; }
+        color: white;
+        font-family: 'Exo 2';
+        font-size: 16px; }
       .editLessonOverlay .innerBox .finishTime #finish_time_h {
         position: absolute;
         top: 0;
@@ -267,210 +520,293 @@ body {
         right: 0px;
         width: 60px; }
     .editLessonOverlay .innerBox #lesson_name {
-      position: absolute;
-      top: 130px; }
+      top: 80px;
+      left: 20px; }
     .editLessonOverlay .innerBox #teacher_name {
-      position: absolute;
-      top: 180px; }
+      top: 80px;
+      right: 20px; }
     .editLessonOverlay .innerBox #class_room {
-      position: absolute;
-      top: 230px; }
+      top: 140px;
+      left: 20px; }
     .editLessonOverlay .innerBox #week {
-      position: absolute;
-      top: 280px; }
+      top: 140px;
+      right: 20px; }
     .editLessonOverlay .innerBox #bgColor {
-      position: absolute;
-      top: 330px; }
+      top: 200px;
+      left: 20px; }
     .editLessonOverlay .innerBox .editLesson {
       position: absolute;
-      top: 380px;
-      left: 50%;
-      -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-      transform: translateX(-50%);
-      background: #2B2C38;
-      width: 250px;
+      top: 400px;
+      right: 20px;
+      background: transparent;
+      width: 220px;
       height: 40px;
       border: none;
       outline: none;
       cursor: pointer;
-      font-family: Raleway;
+      font-family: 'Exo 2';
       font-size: 18px;
-      color: white;
-      background: #09BC8A; }
+      color: #00FF88;
+      border: 1px solid #00FF88; }
+      .editLessonOverlay .innerBox .editLesson:hover {
+        background: #00FF88;
+        color: #2a2a2a; }
+      .editLessonOverlay .innerBox .editLesson:focus {
+        background: #00FF88;
+        color: #2a2a2a; }
 
-.hideOverlay {
-  display: block; }
-
-.menubar {
+.setBGOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 30px;
-  background: #23232E; }
-  /*.menubar #weeks {
+  height: 100vh;
+  background: rgba(42, 42, 42, 0.9);
+  z-index: 9999;
+  display: none;
+  opacity: 0; }
+  .setBGOverlay .innerBox {
     position: absolute;
-    top: 30px;
-    left: 150px;
-    width: 150px;
-    height: auto;
-    cursor: pointer;
-    font-family: Raleway;
-    font-size: 18px;
-    font-weight: 700;
-    color: #8B8DA1;
-    text-align: center;
-    line-height: 30px;
-    width: 150px;
-    height: 30px;
-    background: #23232E;
-    z-index: 90;
-    display: none; }*/
-    .menubar #weeks:hover {
-      background: #2B2C38; }
-    .menubar #weeks li {
-      list-style: none;
-      width: 100%;
-      height: 30px;
-      background: #23232E;
-      cursor: pointer; }
-      .menubar #weeks li:hover {
-        color: #09BC8A; }
-  .menubar .exitBTN {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50px;
-    height: 30px;
-    cursor: pointer;
-    text-align: center; }
-    .menubar .exitBTN:hover i {
-      color: #09BC8A; }
-    .menubar .exitBTN i {
-      cursor: pointer;
-      line-height: 30px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 530px;
+    height: 500px; }
+    .setBGOverlay .innerBox #exitOverlay {
       font-size: 24px;
-      color: #8B8DA1; }
-
-.topbar {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  width: 100vw;
-  height: 50px;
-  background: #2B2C38; }
-  .topbar ul {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px; }
-    .topbar ul li {
-      position: relative;
-      float: left;
-      width: 14.28%;
-      text-align: center;
-      line-height: 50px;
-      list-style: none;
-      font-family: Raleway;
-      font-weight: 700;
+      color: white;
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      cursor: pointer; }
+      .setBGOverlay .innerBox #exitOverlay:hover {
+        color: #00FF88; }
+    .setBGOverlay .innerBox h1 {
+      position: absolute;
+      top: -60px;
+      left: 20px;
+      font-family: "Exo 2";
+      font-size: 25px;
+      font-weight: 300;
+      color: white; }
+    .setBGOverlay .innerBox .chooseBG {
+      position: absolute;
+      top: 0;
+      left: 20px;
+      border: 1px solid white;
+      width: 490px;
+      height: 50px;
+      cursor: pointer; }
+      .setBGOverlay .innerBox .chooseBG:hover {
+        border-color: #00FF88; }
+        .setBGOverlay .innerBox .chooseBG:hover h1 {
+          color: #00FF88; }
+      .setBGOverlay .innerBox .chooseBG input {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        opacity: 0;
+        z-index: 99; }
+      .setBGOverlay .innerBox .chooseBG h1 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-family: "Exo 2";
+        font-size: 20px;
+        font-weight: 300;
+        color: white; }
+    .setBGOverlay .innerBox .addBG {
+      position: absolute;
+      top: 400px;
+      right: 20px;
+      background: transparent;
+      width: 220px;
+      height: 40px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: 'Exo 2';
       font-size: 18px;
-      color: #8B8DA1; }
+      color: #00FF88;
+      border: 1px solid #00FF88; }
+      .setBGOverlay .innerBox .addBG:hover {
+        background: #00FF88;
+        color: #2a2a2a; }
+    .setBGOverlay .innerBox .bgChanger {
+      position: absolute;
+      top: 80px;
+      left: 20px;
+      width: 490px;
+      height: 50px; }
+      .setBGOverlay .innerBox .bgChanger #bgSec {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        width: 70px;
+        height: 50px;
+        border: 1px solid white;
+        background: transparent;
+        outline: none;
+        text-align: center;
+        font-family: "Exo 2";
+        font-size: 16px;
+        font-weight: 300;
+        color: white; }
+        .setBGOverlay .innerBox .bgChanger #bgSec:focus {
+          border-color: #00FF88; }
+      .setBGOverlay .innerBox .bgChanger h1 {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        font-family: "Exo 2";
+        font-size: 20px;
+        font-weight: 300;
+        color: white; }
+    .setBGOverlay .innerBox .helpText {
+      position: absolute;
+      top: 150px;
+      left: 20px;
+      width: 490px;
+      height: 80px; }
+      .setBGOverlay .innerBox .helpText span {
+        color: #00FF88; }
+      .setBGOverlay .innerBox .helpText h1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: "Exo 2";
+        font-size: 15px;
+        font-weight: 300;
+        color: white; }
+    .setBGOverlay .innerBox .staticColor {
+      position: absolute;
+      top: 250px;
+      left: 20px;
+      width: 490px;
+      height: 50px;
+      border: 1px solid white;
+      background: transparent;
+      outline: none;
+      font-family: "Exo 2";
+      font-size: 15px;
+      font-weight: 300;
+      color: white; }
+      .setBGOverlay .innerBox .staticColor:focus {
+        border-color: #00FF88; }
 
-.container {
-  position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  top: 80px;
+.importexportOverlay {
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 80px);
-  padding-top: 10px;
-  padding-left: 30px;
-  padding-right: 30px;
-  overflow: hidden; }
-  .container .innerContainer {
-    background: none;
+  height: 100vh;
+  background: rgba(42, 42, 42, 0.9);
+  z-index: 9999;
+  display: none;
+  opacity: 0; }
+  .importexportOverlay .innerBox {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 10px);
-    padding-top: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-    overflow-y: auto; }
-  .container .week {
-    position: absolute;
-    display: none;
-    left: 0; }
-  .container .day {
-    position: relative;
-    float: left;
-    width: 235px;
-    height: 500px;
-    margin-left: 20px;
-    margin-right: 20px; }
-    .container .day .lesson {
-      position: relative;
-      width: 100%;
-      height: 100px;
-      border-radius: 20px;
-      margin-bottom: 40px; }
-      .container .day .lesson:after {
-        content: '';
-        position: absolute;
-        bottom: -20px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: #8B8DA1; }
-      .container .day .lesson:last-of-type:after {
-        display: none; }
-    .container .day i {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 25px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 530px;
+    height: 500px; }
+    .importexportOverlay .innerBox #exitOverlay {
+      font-size: 24px;
       color: white;
-      display: none;
+      position: absolute;
+      top: -60px;
+      right: -60px;
       cursor: pointer; }
-    .container .day .hide {
-      display: block; }
-    .container .day #className {
+      .importexportOverlay .innerBox #exitOverlay:hover {
+        color: #00FF88; }
+    .importexportOverlay .innerBox h1 {
       position: absolute;
-      top: 10px;
-      left: 15px;
-      font-family: Raleway;
+      top: -60px;
+      left: 20px;
+      font-family: "Exo 2";
+      font-size: 25px;
+      font-weight: 300;
+      color: white; }
+    .importexportOverlay .innerBox .error {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: "Exo 2";
       font-size: 20px;
-      font-weight: 600;
+      font-weight: 300;
       color: white; }
-    .container .day #teacherName {
+      .importexportOverlay .innerBox .error span {
+        color: #DB2B39; }
+    .importexportOverlay .innerBox .exportTimetableBTN {
       position: absolute;
-      bottom: 10px;
-      right: 15px;
-      font-family: Roboto;
-      font-size: 18px;
-      font-weight: 400;
-      color: white; }
-    .container .day #classRoom {
+      top: 0;
+      left: 20px;
+      width: 220px;
+      height: 50px;
+      border: 1px solid white;
+      white-space: nowrap;
+      text-align: center;
+      cursor: pointer; }
+      .importexportOverlay .innerBox .exportTimetableBTN:hover {
+        border-color: #00FF88; }
+        .importexportOverlay .innerBox .exportTimetableBTN:hover h1 {
+          color: #00FF88; }
+      .importexportOverlay .innerBox .exportTimetableBTN h1 {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-family: "Exo 2";
+        font-size: 18px;
+        font-weight: 300;
+        color: white; }
+    .importexportOverlay .innerBox .importTimetableBTN {
       position: absolute;
-      bottom: 10px;
-      left: 15px;
-      font-family: Roboto;
-      font-size: 18px;
-      font-weight: 400;
-      color: white; }
-    .container .day #time {
-      position: absolute;
-      bottom: 40px;
-      left: 15px;
-      font-family: Roboto;
-      font-size: 18px;
-      font-weight: 400;
-      color: white; }
-
-@media screen and (max-width: 1360px) {
-  .container .innerContainer .day {
-    width: 155px; } }
+      top: 0;
+      right: 20px;
+      width: 220px;
+      height: 50px;
+      border: 1px solid white;
+      white-space: nowrap;
+      text-align: center;
+      cursor: pointer; }
+      .importexportOverlay .innerBox .importTimetableBTN:hover {
+        border-color: #00FF88; }
+        .importexportOverlay .innerBox .importTimetableBTN:hover h1 {
+          color: #00FF88; }
+      .importexportOverlay .innerBox .importTimetableBTN h1 {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-family: "Exo 2";
+        font-size: 18px;
+        font-weight: 300;
+        color: white; }

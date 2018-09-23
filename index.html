@@ -4,26 +4,39 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/timetable.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="update.css">
     <script src="jquery.min.js" charset="utf-8"></script>
   </head>
   <body>
     <div class="setBGOverlay">
-      <div class="error"></div>
-      <div class="info"><div><img src="info.svg"> If you set the color, the images will not be shown until you leave it empty or with image</div></div>
+      <!-- <div class="error"></div>
+      <div class="info"><div><img src="info.svg"> If you set the color, the images will not be shown until you leave it empty or with image</div></div> -->
       <div class="innerBox">
-        <i id="exitOverlay3" class="material-icons">clear</i>
-        <label class="chooseBG"><i class="material-icons">cloud_upload</i><span>Select Image</span><input type="file" id="bgFile" accept="image/*"></label>
-        <div class="bgChanger">Change time* <input type="text" maxlength="4" id="bgSec"></div>
-        <div class="helpText">*If you have multiple backgrounds, you can set a background change timer. Leave it <span style="color:#09BC8A;font-weight:bold">empty</span> or <span style="color:#09BC8A;font-weight:bold">0</span> if you want a static background</div>
-        <input type="text" class="staticColor" placeholder="HTML color or <image>.png">
-        <div class="addBG">Save</div>
+        <i id="exitOverlay" class="icon-multiply"></i>
+        <h1>Change background</h1>
+        <div class="chooseBG">
+          <input type="file" id="bgFile" accept="image/*">
+          <h1>Select background image</h1>
+        </div>
+        <div class="bgChanger">
+          <input type="text" maxlength="4" id="bgSec">
+          <h1>Select transition time</h1>
+        </div>
+        <div class="helpText">
+          <h1>
+            <span>-</span> If you have multiple backgrounds, you can set a background change timer. Leave it <span>empty</span> or <span>0</span> if you want a static background. <br>
+            <span>-</span> You can set color as background too, just simply delete the text below and write in what you want.
+          </h1>
+        </div>
+        <input type="text" class="staticColor" placeholder="">
+        <input type="button" value="Save" class="addBG">
       </div>
     </div>
     <div class="addLessonOverlay">
       <div class="innerBox">
-        <i id="exitOverlay" class="material-icons">clear</i>
+        <i id="exitOverlay" class="icon-multiply"></i>
+        <h1>Add new lesson</h1>
         <div class="startTime">
           <p>Start time</p>
           <select type="text" placeholder="H" id="start_time_h">
@@ -62,7 +75,8 @@
     </div>
     <div class="editLessonOverlay">
       <div class="innerBox">
-        <i id="exitOverlay" class="material-icons">clear</i>
+        <i id="exitOverlay" class="icon-multiply"></i>
+        <h1>Edit lesson</h1>
         <div class="startTime">
           <p>Start time</p>
           <select type="text" placeholder="H" id="start_time_h">
@@ -85,42 +99,84 @@
         <input type="button" value="Edit lesson" class="editLesson">
       </div>
     </div>
-
-    <div class="menubar">
-      <div id="weekType" class="selectedWeek"><p></p></div>
-      <ul class="options">
-
-        <li class="changeWeekBTN"><i class="material-icons">settings</i><p>Change Weeks</p></li>
-        <li class="addBTN"><i class="material-icons">add_circle</i><p>Add Lesson</p></li>
-        <li class="editBTN"><i class="material-icons">create</i><p>Edit Lessons</p></li>
-        <li class="bgBTN"><i class="material-icons">add_photo_alternate</i><p>Set Background</p></li>
-        <li class="deleteBTN"><i class="material-icons">delete</i><p>Delete Lessons</p></li>
-      </ul>
-      <ul id="weeks">
-      </ul>
-
-      <div class="exitBTN">
-        <i class="material-icons">clear</i>
+    <div class="importexportOverlay">
+      <div class="innerBox">
+        <i id="exitOverlay" class="icon-multiply"></i>
+        <h1>Export / Import timetable</h1>
+        <div class="exportTimetableBTN">
+          <h1>Select export <br>directory</h1>
+        </div>
+        <div class="importTimetableBTN">
+          <h1>Select importable <br>timetable</h1>
+        </div>
+        <div class="error"></div>
       </div>
     </div>
+
+
     <div class="topbar">
       <ul>
-        <li>Monday</li>
-        <li>Tuesday</li>
-        <li>Wednesday</li>
-        <li>Thursday</li>
-        <li>Friday</li>
-        <li>Saturday</li>
-        <li>Sunday</li>
+        <li class="selectedWeek">Week A</li>
+        <li class="changeWeekBTN"><i class="icon-repeat"></i></li>
+        <li class="bgBTN"><i class="icon-picture"></i></li>
+        <li class="addBTN"><i class="icon-add"></i></li>
+        <li class="editBTN"><i class="icon-edit"></i></li>
+        <li class="deleteBTN"><i class="icon-garbage"></i></li>
+        <li class="importexportBTN"><i class="icon-importexport"></i></li>
+      </ul>
+      <div class="minimizeBTN"><i class="icon-minimize"></i></div>
+      <div class="exitBTN"><i class="icon-multiply"></i></div>
+      <ul id="weeks">
+        <li>ASD</li>
       </ul>
     </div>
+
+    <div class="daysBar">
+      <ul>
+        <li id="day1">Monday</li>
+        <li id="day2">Tuesday</li>
+        <li id="day3">Wednesday</li>
+        <li id="day4">Thursday</li>
+        <li id="day5">Friday</li>
+        <li id="day6">Saturday</li>
+        <li id="day0">Sunday</li>
+      </ul>
+    </div>
+
+    <div class="bg"></div>
+
     <div class="container">
-      <div class="bg"></div>
-
       <div class="innerContainer">
-
+          <!-- <div class="week">
+            <div class="day">
+              <div class="lesson">
+                <i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i>
+                <i id="Sunday-' + k + '" class="material-icons editItem">create</i>
+                <div class="sideColor"></div>
+                <p id="time">7:40-8:25</p>
+                <p id="className">Work organization knowledge</p>
+                <p id="teacherName">Officer Rhoades</p>
+                <p id="classRoom">201</p>
+              </div>
+            </div>
+            <div class="day">
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+              <div class="lesson"><i id="Sunday-' + k + '" class="material-icons deleteItem">delete_forever</i><i id="Sunday-' + k + '" class="material-icons editItem">create</i><div class="sideColor"></div><p id="time">7:40-8:25</p><p id="className">Programming</p><p id="teacherName">Officer Rhoades</p><p id="classRoom">201</p></div>
+            </div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+          </div> -->
       </div>
     </div>
+
     <script>
       require('./renderer.js');
     </script>
