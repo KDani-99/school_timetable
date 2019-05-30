@@ -33,5 +33,3 @@ We wanted to make a really simple, but useful application to manage your lessons
  
 There might be bugs, errors, so if you find any, please report it.
  
-## 📧 Contact/Feedback
-If you would like to message us, please send an email to: porsekin@gmail.com
