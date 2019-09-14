@@ -25,10 +25,3 @@ We wanted to make a really simple, but useful application to manage your lessons
 ![Screenshot 2](/screenshot2.jpg)
 ![Screenshot 3](/screenshot3.jpg)
  
-## ✈️ Planned features
-- Notifications
- 
-## ❌ Bugs/Errors
- 
-There might be bugs, errors, so if you find any, please report it.
- 
