@@ -1,4 +1,6 @@
-# Timetable
+# 🐱‍🏍UPDATE: New version of timetable we'll be coming soon with new name, refreshed design, more feature and translations!
+
+## Timetable
 
 We wanted to make a really simple, but useful application to manage your lessons/activities, so we made it.
  
