@@ -1,15 +1,19 @@
-# 🐱‍🏍UPDATE: New version of timetable we'll be coming soon with new name, refreshed design, more feature and translations!
+# 🐱‍🏍UPDATE: New version available here: https://github.com/natixco/revolt
 
-## Timetable
+
+
+
+
+### Timetable
 
 We wanted to make a really simple, but useful application to manage your lessons/activities, so we made it.
  
-##  🆕 New features
+###  🆕 New features
 - New, responsive UI
 - Export / import timetables
 - You can set images as background and even add multiple images for slideshow
  
-## 📝Current features
+### 📝Current features
  
 - Add, edit, delete lessons/activities. You can set a unique color for each lessosn/activity, you can use your own colors, but for the best experience we recommend to use flatuicolors.com
 - You can even add multiple weeks, so you can change the week that you want to see
@@ -21,7 +25,7 @@ We wanted to make a really simple, but useful application to manage your lessons
     - CSS style linear- and radial-gradient.
     - Transition time is in seconds
  
-## 🖼️ Screenshots
+### 🖼️ Screenshots
  
 ![Screenshot 1](/screenshot1.jpg)
 ![Screenshot 2](/screenshot2.jpg)
