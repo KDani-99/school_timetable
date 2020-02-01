@@ -1,4 +1,5 @@
 # 🐱‍🏍UPDATE: New version available here: https://github.com/natixco/revolt
+# 🐱‍🏍UPDATE: Mobile version: https://github.com/KDani-99/tabby-native
 
 
 
