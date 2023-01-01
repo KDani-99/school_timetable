@@ -11,7 +11,7 @@
   "author": "Patrick&Daniel",
   "license": "ISC",
   "devDependencies": {
-	"electron-builder": "^20.28.1"
+	"electron-builder": "^20.44.4"
   },
   "build": {
     "appId": "timetable.io",
